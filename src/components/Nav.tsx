@@ -6,7 +6,7 @@ const LINKS = [
   { href: "#why", label: "WHY" },
   { href: "#origin", label: "ORIGIN" },
   { href: "#arsenal", label: "ARSENAL" },
-  { href: "#console", label: "CONSOLE" },
+  { href: "#featured", label: "FEATURED" },
   { href: "#landscape", label: "LANDSCAPE" },
   { href: "#install", label: "INSTALL" },
 ];

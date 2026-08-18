@@ -38,6 +38,7 @@
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
   --font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
   --font-sans: "Archivo", ui-sans-serif, system-ui, sans-serif;
+  --font-brush: "Permanent Marker", "Caveat", cursive, sans-serif;
 }
 
 :root {
@@ -203,6 +204,22 @@
 
 @utility live-dot {
   animation: pulse-dot 1.8s ease-in-out infinite;
+}
+
+@keyframes watermark-glow {
+  0%,
+  100% {
+    opacity: 0.18;
+  }
+  50% {
+    opacity: 0.44;
+  }
+}
+
+@utility watermark-neon {
+  animation: watermark-glow 5.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  will-change: opacity;
+  filter: drop-shadow(0 0 35px rgba(255, 175, 55, 0.45));
 }
 
 @media (prefers-reduced-motion: reduce) {

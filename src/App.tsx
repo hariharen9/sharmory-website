@@ -3,7 +3,7 @@ import { Hero } from "@/components/Hero";
 import { Why } from "@/components/Why";
 import { Origin } from "@/components/Origin";
 import { Arsenal } from "@/components/Arsenal";
-import { Console } from "@/components/Console";
+import { Featured } from "@/components/Featured";
 import { Landscape } from "@/components/Landscape";
 import { Install } from "@/components/Install";
 import { Closing } from "@/components/Closing";
@@ -35,7 +35,7 @@ export default function App() {
         <Why />
         <Origin />
         <Arsenal />
-        <Console />
+        <Featured />
         <Landscape />
         <Install />
         <Closing />

@@ -36,12 +36,17 @@ export function Origin() {
         <div className="grid gap-12 pt-12 lg:grid-cols-12 lg:gap-16">
           {/* Left column / Narrative */}
           <div className="lg:col-span-5">
-            <h3 className="display text-[clamp(2rem,5vw,3.75rem)]">
-              <MaskLine>BORN IN A</MaskLine>
-              <MaskLine delay={0.06}>
-                <span className="text-signal">DIRTY .ZSHRC,</span>
+            <h3 className="display text-[clamp(2rem,5vw,3.75rem)] leading-[1.02]">
+              <MaskLine className="py-1">BORN IN A</MaskLine>
+              <MaskLine delay={0.06} className="py-2">
+                <span className="inline-flex items-baseline gap-2">
+                  <span>DIRTY</span>
+                  <span className="font-brush text-phosphor tracking-normal text-[0.88em] leading-none inline-block -rotate-2 px-2.5 pt-1 pb-1.5 border-b-2 border-phosphor/70 drop-shadow-[0_0_15px_rgba(57,255,20,0.4)]">
+                    .zshrc,
+                  </span>
+                </span>
               </MaskLine>
-              <MaskLine delay={0.12}>HARDENED DAILY.</MaskLine>
+              <MaskLine delay={0.12} className="py-1">HARDENED DAILY.</MaskLine>
             </h3>
 
             <Reveal delay={0.15}>
