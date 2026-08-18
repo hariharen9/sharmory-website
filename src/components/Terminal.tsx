@@ -87,19 +87,19 @@ export function TerminalBlock({
   return (
     <div
       ref={ref}
-      className={`border border-hairline bg-card/85 shadow-2xl shadow-signal/5 backdrop-blur-md transition-all ${className ?? ""}`}
+      className={`w-full max-w-full min-w-0 overflow-hidden border border-hairline bg-card/85 shadow-2xl shadow-signal/5 backdrop-blur-md transition-all ${className ?? ""}`}
     >
       {/* Terminal Header */}
-      <div className="flex items-center justify-between border-b border-hairline px-3 py-2">
-        <div className="flex items-center gap-1.5">
+      <div className="flex items-center justify-between border-b border-hairline px-2.5 sm:px-3 py-1.5 sm:py-2 min-w-0">
+        <div className="flex items-center gap-1.5 shrink-0">
           <span className="h-2 w-2 rounded-full border border-hairline bg-secondary/80" />
           <span className="h-2 w-2 rounded-full border border-hairline bg-secondary/80" />
           <span className="h-2 w-2 rounded-full border border-signal/60 bg-signal/30" />
         </div>
-        <span className="font-mono text-[10px] tracking-[0.16em] text-muted-foreground uppercase">
+        <span className="truncate px-2 font-mono text-[9.5px] sm:text-[10px] tracking-[0.12em] sm:tracking-[0.16em] text-muted-foreground uppercase">
           {title}
         </span>
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2 shrink-0">
           <button
             type="button"
             onClick={handleManualReplay}
@@ -113,7 +113,7 @@ export function TerminalBlock({
       </div>
 
       {/* Terminal Screen */}
-      <pre className="min-h-[168px] overflow-x-auto p-3.5 font-mono text-[11.5px] leading-relaxed sm:text-[12.5px]">
+      <pre className="min-h-[155px] sm:min-h-[168px] w-full max-w-full p-3 sm:p-3.5 font-mono text-[11px] leading-relaxed sm:text-[12.5px] whitespace-pre-wrap break-all sm:whitespace-pre sm:break-normal overflow-x-hidden sm:overflow-x-auto">
         {visible.map((l, i) => (
           <div key={i} className={`${COLOR[l.kind]} py-0.5`}>
             {l.kind === "cmd" ? (

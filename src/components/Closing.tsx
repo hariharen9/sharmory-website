@@ -83,15 +83,38 @@ export function Closing() {
       {/* Modern Technical Footer */}
       <footer className="border-t border-hairline bg-[#080808]">
         <div className="mx-auto max-w-[1600px] px-5 py-8 sm:px-8">
-          <div className="flex flex-wrap items-center justify-between gap-y-4 font-mono text-[10.5px] tracking-[0.18em] text-muted-foreground uppercase">
+          {/* Top credits & author bar */}
+          <div className="flex flex-wrap items-center justify-between gap-y-3 pb-6 border-b border-hairline/60 font-mono text-[10px] sm:text-[10.5px] tracking-[0.16em] text-muted-foreground uppercase">
+            <div className="flex items-center gap-2">
+              <span className="live-dot h-1.5 w-1.5 rounded-full bg-phosphor" />
+              <span>BUILT FOR PEOPLE WHO LIVE IN TERMINALS</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-muted-foreground/80">DESIGNED &amp; BUILT BY</span>
+              <a
+                href="https://hariharen.site"
+                target="_blank"
+                rel="noreferrer"
+                className="group inline-flex items-center gap-1.5 border border-hairline bg-card/60 px-2.5 py-1 text-signal font-semibold tracking-wider transition-all hover:border-signal hover:bg-signal hover:text-primary-foreground"
+              >
+                <span>HARIHAREN</span>
+                <span className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
+                  ↗
+                </span>
+              </a>
+            </div>
+          </div>
+
+          {/* Bottom links & copyright bar */}
+          <div className="mt-6 flex flex-wrap items-center justify-between gap-y-4 font-mono text-[10px] sm:text-[10.5px] tracking-[0.18em] text-muted-foreground uppercase">
             <div className="flex items-center gap-3">
-              <span className="grid h-5 w-5 place-items-center border border-signal text-[10px] text-signal">
+              <span className="grid h-5 w-5 place-items-center border border-signal text-[10px] font-bold text-signal">
                 S
               </span>
               <span>SHARMORY © {new Date().getFullYear()}</span>
               <span className="hidden sm:inline text-hairline">|</span>
               <span className="hidden sm:inline text-muted-foreground/70">
-                BUILT FOR PEOPLE WHO LIVE IN TERMINALS
+                0 DEPENDENCIES · DUAL-SHELL ARSENAL
               </span>
             </div>
 

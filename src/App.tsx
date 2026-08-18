@@ -11,10 +11,10 @@ import { ScrollProgress, Ticker } from "@/components/primitives";
 
 export default function App() {
   return (
-    <div className="grain min-h-screen bg-background">
+    <div className="grain min-h-screen w-full max-w-full overflow-x-hidden bg-background">
       <ScrollProgress />
       <Nav />
-      <main>
+      <main className="w-full max-w-full overflow-x-hidden">
         <Hero />
         <Ticker
           items={[

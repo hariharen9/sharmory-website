@@ -226,9 +226,9 @@ export function Hero() {
         if (reduced || e.pointerType !== "mouse") return;
         setPointer({ x: e.clientX / window.innerWidth, y: e.clientY / window.innerHeight });
       }}
-      className="relative flex min-h-0 lg:min-h-[calc(100vh-3.5rem)] flex-col justify-between overflow-hidden border-b border-hairline pt-14"
+      className="relative flex min-h-0 w-full max-w-full flex-col justify-between overflow-hidden border-b border-hairline pt-14 lg:min-h-[calc(100vh-3.5rem)]"
     >
-      {/* interactive field */}
+      {/* interactive background field */}
       <div
         aria-hidden
         className="grid-field pointer-events-none absolute inset-0 opacity-60"
@@ -243,33 +243,33 @@ export function Hero() {
         className="pointer-events-none absolute -top-40 -right-40 h-[36rem] w-[36rem] rounded-full bg-signal/8 blur-[120px]"
       />
 
-      <div className="relative mx-auto flex w-full max-w-[1600px] flex-1 flex-col justify-between px-4 sm:px-8">
-        {/* metadata rail */}
-        <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1.5 border-b border-hairline py-2 font-mono text-[9px] sm:text-[9.5px] tracking-[0.16em] sm:tracking-[0.2em] text-muted-foreground uppercase">
+      <div className="relative mx-auto flex w-full max-w-[1600px] min-w-0 flex-1 flex-col justify-between overflow-hidden px-4 sm:px-8">
+        {/* Status / Metadata Rail */}
+        <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 border-b border-hairline py-2 font-mono text-[9px] sm:text-[9.5px] tracking-[0.14em] sm:tracking-[0.2em] text-muted-foreground uppercase">
           <span className="flex items-center gap-1.5 sm:gap-2">
             <span className="live-dot h-1.5 w-1.5 rounded-full bg-signal" />
-            SHARMORY / DEV TOOLCHAIN · STATUS: ARMED
+            SHARMORY · STATUS: ARMED
           </span>
-          <span className="hidden md:inline">v1.0 · ZSH &amp; POWERSHELL 5.1+ / CORE 7+ · MIT</span>
+          <span className="hidden sm:inline">v1.0 · ZSH &amp; POWERSHELL 5.1+ / CORE 7+ · MIT</span>
           <span className="flex items-center gap-1.5 sm:gap-2">
             <span className="live-dot h-1.5 w-1.5 rounded-full bg-phosphor" />
             SYS/UTC <Coords />
           </span>
         </div>
 
-        {/* Hero Grid — Responsive & Touch Friendly */}
-        <div className="my-auto grid items-center gap-8 py-6 sm:py-8 lg:grid-cols-12 lg:gap-10 lg:py-8">
+        {/* Hero Grid */}
+        <div className="my-auto grid w-full min-w-0 items-center gap-6 py-6 sm:py-8 lg:grid-cols-12 lg:gap-10 lg:py-8">
           {/* Left Hero Column */}
           <motion.div
-            className="lg:col-span-7"
+            className="w-full min-w-0 lg:col-span-7"
             {...(reduced ? {} : { style: { y: yType, opacity: fade } })}
           >
-            <div className="mb-2.5 flex items-center gap-2.5 font-mono text-[10.5px] tracking-[0.22em] text-signal">
-              <span className="h-px w-8 bg-signal" />
+            <div className="mb-2 flex items-center gap-2 font-mono text-[10px] sm:text-[10.5px] tracking-[0.22em] text-signal">
+              <span className="h-px w-6 sm:w-8 bg-signal" />
               THE DEVELOPER&apos;S ARMOURY
             </div>
 
-            <h1 className="display text-[clamp(2.25rem,8.5vw,5.2rem)] leading-[0.9]">
+            <h1 className="display text-[clamp(2.35rem,11.5vw,5.2rem)] leading-[0.92]">
               {HEADLINES.map((h, i) => (
                 <span key={h.text} className="block overflow-hidden">
                   <motion.span
@@ -293,7 +293,7 @@ export function Hero() {
             </h1>
 
             <motion.p
-              className="mt-3.5 max-w-xl font-mono text-xs leading-relaxed text-muted-foreground sm:text-sm"
+              className="mt-3 max-w-xl font-mono text-xs leading-relaxed text-muted-foreground sm:text-sm"
               {...(reduced
                 ? {}
                 : {
@@ -304,14 +304,15 @@ export function Hero() {
             >
               A single-file arsenal of sharp, practical utilities for developers who&apos;d rather
               type one command than write ten.{" "}
-              <span className="text-foreground">
-                {SHIPPED} functions ready to source in eight seconds.
+              <span className="text-foreground font-semibold">
+                {SHIPPED} functions ready to source in 8 seconds.
               </span>{" "}
               No plugin manager. No framework. Zero startup tax.
             </motion.p>
 
+            {/* CTAs: Clean stack on mobile */}
             <motion.div
-              className="mt-5 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-2.5"
+              className="mt-5 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-2 w-full"
               {...(reduced
                 ? {}
                 : {
@@ -322,31 +323,33 @@ export function Hero() {
             >
               <MagneticLink
                 href="#install"
-                className="group inline-flex justify-center items-center gap-2.5 bg-signal px-5 py-3 font-mono text-xs tracking-[0.2em] text-primary-foreground uppercase transition-shadow hover:shadow-[0_0_0_3px_var(--color-signal)]/30"
+                className="group inline-flex justify-center items-center gap-2.5 bg-signal px-5 py-3 font-mono text-xs tracking-[0.2em] font-semibold text-primary-foreground uppercase transition-shadow hover:shadow-[0_0_0_3px_var(--color-signal)]/30 w-full sm:w-auto text-center"
               >
                 LOAD THE ARMOURY
                 <span className="transition-transform duration-300 group-hover:translate-x-1">
                   →
                 </span>
               </MagneticLink>
-              <MagneticLink
-                href="#arsenal"
-                className="inline-flex justify-center items-center gap-2.5 border border-hairline px-5 py-3 font-mono text-xs tracking-[0.2em] uppercase transition-colors hover:border-signal hover:text-signal"
-              >
-                EXPLORE COMMANDS ↓
-              </MagneticLink>
-              <MagneticLink
-                href={REPO}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex justify-center items-center gap-2.5 border border-hairline px-4 py-3 font-mono text-xs tracking-[0.2em] uppercase transition-colors hover:border-signal hover:text-signal"
-              >
-                GITHUB ↗
-              </MagneticLink>
+              <div className="grid grid-cols-2 sm:flex items-center gap-2 w-full sm:w-auto">
+                <MagneticLink
+                  href="#arsenal"
+                  className="inline-flex justify-center items-center gap-1.5 border border-hairline px-3 py-3 font-mono text-xs tracking-[0.14em] uppercase transition-colors hover:border-signal hover:text-signal text-center"
+                >
+                  COMMANDS ↓
+                </MagneticLink>
+                <MagneticLink
+                  href={REPO}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex justify-center items-center gap-1.5 border border-hairline px-3 py-3 font-mono text-xs tracking-[0.14em] uppercase transition-colors hover:border-signal hover:text-signal text-center"
+                >
+                  GITHUB ↗
+                </MagneticLink>
+              </div>
             </motion.div>
 
             {/* Left Stats Row */}
-            <div className="mt-6 grid max-w-md grid-cols-3 border-t border-hairline pt-3 font-mono text-[9px] sm:text-[9.5px] tracking-[0.16em] text-muted-foreground uppercase">
+            <div className="mt-5 grid max-w-md grid-cols-3 border-t border-hairline pt-3 font-mono text-[9px] sm:text-[9.5px] tracking-[0.16em] text-muted-foreground uppercase text-center sm:text-left">
               <div>
                 <div className="display text-xl text-foreground sm:text-2xl">{SHIPPED}</div>
                 functions
@@ -364,47 +367,42 @@ export function Hero() {
 
           {/* Right Hero Column: Interactive Terminal */}
           <motion.div
-            className="lg:col-span-5"
+            className="w-full min-w-0 overflow-hidden lg:col-span-5"
             {...(reduced ? {} : { style: { y: yPanel } })}
           >
-            <div className="relative">
+            <div className="relative w-full min-w-0">
               <span className="absolute -top-2.5 -left-2.5 hidden h-10 w-10 border-t border-l border-signal/60 lg:block" />
 
               {/* Shell Selector Bar */}
-              <div className="mb-1.5 flex items-center justify-between border border-hairline bg-card/60 px-2.5 py-1.5 font-mono text-[9.5px]">
-                <span className="tracking-[0.16em] text-muted-foreground uppercase">
-                  ACTIVE SHELL:
-                </span>
-                <div className="flex items-center gap-1">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setShell("zsh");
-                      setActionKey("boot");
-                    }}
-                    className={`px-2 py-1 tracking-wider uppercase transition-colors ${
-                      shell === "zsh"
-                        ? "bg-signal font-bold text-primary-foreground"
-                        : "border border-hairline text-muted-foreground hover:text-foreground"
-                    }`}
-                  >
-                    ⌘ ZSH / UNIX
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setShell("pwsh");
-                      setActionKey("boot");
-                    }}
-                    className={`px-2 py-1 tracking-wider uppercase transition-colors ${
-                      shell === "pwsh"
-                        ? "bg-signal font-bold text-primary-foreground"
-                        : "border border-hairline text-muted-foreground hover:text-foreground"
-                    }`}
-                  >
-                    ⊞ POWERSHELL
-                  </button>
-                </div>
+              <div className="mb-1.5 grid grid-cols-2 items-center justify-between border border-hairline bg-card/60 p-1 font-mono text-[9.5px]">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShell("zsh");
+                    setActionKey("boot");
+                  }}
+                  className={`py-1.5 px-2 text-center tracking-wider uppercase transition-colors ${
+                    shell === "zsh"
+                      ? "bg-signal font-bold text-primary-foreground shadow-sm"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  ⌘ ZSH / UNIX
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShell("pwsh");
+                    setActionKey("boot");
+                  }}
+                  className={`py-1.5 px-2 text-center tracking-wider uppercase transition-colors ${
+                    shell === "pwsh"
+                      ? "bg-signal font-bold text-primary-foreground shadow-sm"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  ⊞ POWERSHELL
+                </button>
               </div>
 
               {/* Interactive Terminal Block */}
@@ -415,21 +413,21 @@ export function Hero() {
                 promptPrefix={promptPrefix}
               />
 
-              {/* Interactive Command Pills Grid (Horizontal swipe on mobile, wrap on desktop) */}
-              <div className="mt-2 border border-hairline bg-card/40 p-2 font-mono text-[9.5px]">
+              {/* Interactive Command Pills Grid (wrapped neatly, zero horizontal scrolling) */}
+              <div className="mt-2 w-full min-w-0 border border-hairline bg-card/40 p-2 font-mono text-[9.5px]">
                 <div className="mb-1.5 flex items-center justify-between border-b border-hairline pb-1">
                   <span className="tracking-wider text-muted-foreground/80 uppercase">
                     TRY VERBS IN SHELL:
                   </span>
                   <span className="text-signal">{commandKeys.length} SCENARIOS</span>
                 </div>
-                <div className="flex overflow-x-auto no-scrollbar sm:flex-wrap gap-1 pb-0.5">
+                <div className="flex flex-wrap gap-1">
                   {commandKeys.map((k) => (
                     <button
                       key={k}
                       type="button"
                       onClick={() => setActionKey(k)}
-                      className={`shrink-0 border px-2 py-1 transition-colors ${
+                      className={`border px-2 py-1 transition-colors ${
                         actionKey === k
                           ? "border-signal bg-signal/20 font-semibold text-signal"
                           : "border-hairline text-muted-foreground hover:border-signal/50 hover:text-foreground"
@@ -442,15 +440,15 @@ export function Hero() {
               </div>
 
               {/* Status footer metrics */}
-              <div className="mt-2 grid grid-cols-3 gap-1.5 font-mono text-[9px] tracking-[0.14em] text-muted-foreground uppercase">
-                <div className="border border-hairline px-2 py-1">
-                  STARTUP <span className="float-right text-signal font-bold">0 ms</span>
+              <div className="mt-2 grid grid-cols-3 gap-1 font-mono text-[8.5px] sm:text-[9px] tracking-[0.1em] sm:tracking-[0.14em] text-muted-foreground uppercase text-center">
+                <div className="border border-hairline px-1.5 py-1">
+                  STARTUP <span className="block sm:inline sm:float-right text-signal font-bold">0 ms</span>
                 </div>
-                <div className="border border-hairline px-2 py-1">
-                  SANDBOX <span className="float-right text-phosphor font-bold">100%</span>
+                <div className="border border-hairline px-1.5 py-1">
+                  SANDBOX <span className="block sm:inline sm:float-right text-phosphor font-bold">100%</span>
                 </div>
-                <div className="border border-hairline px-2 py-1">
-                  PLUGINS <span className="float-right text-foreground font-bold">0</span>
+                <div className="border border-hairline px-1.5 py-1">
+                  PLUGINS <span className="block sm:inline sm:float-right text-foreground font-bold">0</span>
                 </div>
               </div>
             </div>
