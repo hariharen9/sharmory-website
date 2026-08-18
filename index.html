@@ -1,18 +1,106 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- Primary Metadata -->
+    <title>SHARMORY — Your shell. Fully armed.</title>
+    <meta name="title" content="SHARMORY — Your shell. Fully armed." />
+    <meta
+      name="description"
+      content="A single-file developer's armoury of 98 sharp Zsh and PowerShell functions. Zero plugins, zero frameworks, instant startup."
+    />
+    <meta
+      name="keywords"
+      content="sharmory, shell utilities, zsh functions, powershell utilities, developer armoury, cli tools, git productivity, docker shortcuts, kubernetes aliases, bash tools, dotfiles loadout"
+    />
+    <meta name="author" content="Hariharen" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <link rel="canonical" href="https://sharmory.dev/" />
+    <meta name="theme-color" content="#080808" />
+
+    <!-- Favicons & Touch Icons -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/apple-touch-icon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- Open Graph / Facebook / LinkedIn / Discord -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://sharmory.dev/" />
+    <meta property="og:site_name" content="SHARMORY" />
+    <meta property="og:title" content="SHARMORY — Your shell. Fully armed." />
+    <meta
+      property="og:description"
+      content="A single-file developer's armoury of 98 sharp Zsh and PowerShell functions. Zero plugins, zero frameworks, instant startup."
+    />
+    <meta property="og:image" content="https://sharmory.dev/og-banner.png" />
+    <meta property="og:image:secure_url" content="https://sharmory.dev/og-banner.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="SHARMORY — The Developer's Armoury" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter / X Cards -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://sharmory.dev/" />
+    <meta name="twitter:title" content="SHARMORY — Your shell. Fully armed." />
+    <meta
+      name="twitter:description"
+      content="A single-file developer's armoury of 98 sharp Zsh and PowerShell functions. Zero plugins, zero frameworks, instant startup."
+    />
+    <meta name="twitter:image" content="https://sharmory.dev/og-banner.png" />
+    <meta name="twitter:image:alt" content="SHARMORY — The Developer's Armoury" />
+
+    <!-- Preconnect & Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=JetBrains+Mono:wght@300;400;500;700&family=Permanent+Marker&display=swap" />
-    <title>SHARMORY — Your shell. Fully armed.</title>
-    <meta name="description" content="Sharmory: A single-file developer's armoury of 98 sharp Zsh and PowerShell functions. Zero plugins, zero frameworks, instant startup." />
-    <meta property="og:title" content="SHARMORY — Your shell. Fully armed." />
-    <meta property="og:description" content="A single-file developer's armoury of 98 sharp Zsh and PowerShell functions. Zero plugins, zero frameworks, instant startup." />
-    <meta property="og:type" content="website" />
-    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://api.github.com" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=JetBrains+Mono:wght@300;400;500;700&family=Permanent+Marker&display=swap"
+    />
+
+    <!-- Structured Data (JSON-LD) for Rich Google Snippets -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "SoftwareApplication",
+            "name": "Sharmory",
+            "operatingSystem": "macOS, Linux, Windows",
+            "applicationCategory": "DeveloperApplication",
+            "description": "A single-file developer's armoury of 98 sharp Zsh and PowerShell functions. Zero plugins, zero frameworks, instant startup.",
+            "url": "https://sharmory.dev/",
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "USD"
+            },
+            "license": "https://opensource.org/licenses/MIT",
+            "author": {
+              "@type": "Person",
+              "name": "Hariharen",
+              "url": "https://hariharen.site"
+            }
+          },
+          {
+            "@type": "WebSite",
+            "name": "SHARMORY",
+            "url": "https://sharmory.dev/",
+            "description": "The Developer's Armoury",
+            "publisher": {
+              "@type": "Person",
+              "name": "Hariharen",
+              "url": "https://hariharen.site"
+            }
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>
