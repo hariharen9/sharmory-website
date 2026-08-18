@@ -4,8 +4,10 @@ import { MagneticLink } from "./primitives";
 
 const LINKS = [
   { href: "#why", label: "WHY" },
+  { href: "#origin", label: "ORIGIN" },
   { href: "#arsenal", label: "ARSENAL" },
   { href: "#console", label: "CONSOLE" },
+  { href: "#landscape", label: "LANDSCAPE" },
   { href: "#install", label: "INSTALL" },
 ];
 

@@ -1,8 +1,10 @@
 import { Nav } from "@/components/Nav";
 import { Hero } from "@/components/Hero";
 import { Why } from "@/components/Why";
+import { Origin } from "@/components/Origin";
 import { Arsenal } from "@/components/Arsenal";
 import { Console } from "@/components/Console";
+import { Landscape } from "@/components/Landscape";
 import { Install } from "@/components/Install";
 import { Closing } from "@/components/Closing";
 import { ScrollProgress, Ticker } from "@/components/primitives";
@@ -31,8 +33,10 @@ export default function App() {
           ]}
         />
         <Why />
+        <Origin />
         <Arsenal />
         <Console />
+        <Landscape />
         <Install />
         <Closing />
       </main>

@@ -66,7 +66,7 @@ export function Console() {
         className="pointer-events-none absolute -bottom-40 -left-32 h-[30rem] w-[30rem] rounded-full bg-phosphor/6 blur-[130px]"
       />
       <div className="relative mx-auto max-w-[1600px] px-5 py-20 sm:px-8 sm:py-28">
-        <SectionHead index="03" title="LIVE CONSOLE" note="scripted sessions" />
+        <SectionHead index="04" title="LIVE CONSOLE" note="scripted sessions" />
 
         <div className="grid gap-10 pt-12 lg:grid-cols-12 lg:gap-14">
           <div className="lg:col-span-4">

@@ -62,7 +62,7 @@ export function Install() {
   return (
     <section id="install" className="relative border-b border-hairline">
       <div className="mx-auto max-w-[1600px] px-5 py-20 sm:px-8 sm:py-28">
-        <SectionHead index="04" title="ARM YOUR SHELL" note="≈ 8 seconds" />
+        <SectionHead index="06" title="ARM YOUR SHELL" note="≈ 8 seconds" />
 
         <div className="grid gap-12 pt-12 lg:grid-cols-12 lg:gap-16">
           <div className="min-w-0 lg:col-span-7">
