@@ -10,23 +10,28 @@ const COLOR: Record<Line["kind"], string> = {
   dim: "text-muted-foreground/60",
 };
 
-/** Types out a scripted terminal session once it scrolls into view. */
+/** Types out a scripted terminal session with replay, tab headers, and shell prefix support. */
 export function TerminalBlock({
   lines,
   title = "zsh — sharmory",
-  speed = 16,
+  speed = 14,
+  promptPrefix = "$",
   className,
+  onReplay,
 }: {
   lines: Line[];
   title?: string;
   speed?: number;
+  promptPrefix?: string;
   className?: string;
+  onReplay?: () => void;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-10% 0px" });
   const reduced = useReducedMotion();
   const [count, setCount] = useState(0);
   const [partial, setPartial] = useState("");
+  const [replayKey, setReplayKey] = useState(0);
 
   useEffect(() => {
     if (!inView) return;
@@ -34,6 +39,8 @@ export function TerminalBlock({
       setCount(lines.length);
       return;
     }
+    setCount(0);
+    setPartial("");
     let cancelled = false;
     let i = 0;
 
@@ -43,7 +50,7 @@ export function TerminalBlock({
       if (line.kind !== "cmd") {
         setCount(i + 1);
         i += 1;
-        window.setTimeout(runLine, 170);
+        window.setTimeout(runLine, 140);
         return;
       }
       let c = 0;
@@ -57,49 +64,74 @@ export function TerminalBlock({
           setPartial("");
           setCount(i + 1);
           i += 1;
-          window.setTimeout(runLine, 260);
+          window.setTimeout(runLine, 220);
         }
       };
       tick();
     };
-    const start = window.setTimeout(runLine, 320);
+    const start = window.setTimeout(runLine, 280);
     return () => {
       cancelled = true;
       window.clearTimeout(start);
     };
-  }, [inView, lines, reduced, speed]);
+  }, [inView, lines, reduced, speed, replayKey]);
 
   const visible = lines.slice(0, count);
   const typing = count < lines.length && lines[count]?.kind === "cmd";
 
+  const handleManualReplay = () => {
+    setReplayKey((k) => k + 1);
+    if (onReplay) onReplay();
+  };
+
   return (
     <div
       ref={ref}
-      className={`border border-hairline bg-card/70 backdrop-blur-sm ${className ?? ""}`}
+      className={`border border-hairline bg-card/85 shadow-2xl shadow-signal/5 backdrop-blur-md transition-all ${className ?? ""}`}
     >
+      {/* Terminal Header */}
       <div className="flex items-center justify-between border-b border-hairline px-3 py-2">
         <div className="flex items-center gap-1.5">
-          <span className="h-2 w-2 border border-hairline" />
-          <span className="h-2 w-2 border border-hairline" />
-          <span className="h-2 w-2 border border-signal bg-signal/30" />
+          <span className="h-2 w-2 rounded-full border border-hairline bg-secondary/80" />
+          <span className="h-2 w-2 rounded-full border border-hairline bg-secondary/80" />
+          <span className="h-2 w-2 rounded-full border border-signal/60 bg-signal/30" />
         </div>
-        <span className="font-mono text-[10px] tracking-[0.2em] text-muted-foreground uppercase">
+        <span className="font-mono text-[10px] tracking-[0.16em] text-muted-foreground uppercase">
           {title}
         </span>
-        <span className="live-dot h-1.5 w-1.5 rounded-full bg-phosphor" />
+        <div className="flex items-center gap-2.5">
+          <button
+            type="button"
+            onClick={handleManualReplay}
+            className="font-mono text-[9px] tracking-wider text-muted-foreground transition-colors hover:text-signal"
+            title="Replay terminal session"
+          >
+            ↺ REPLAY
+          </button>
+          <span className="live-dot h-1.5 w-1.5 rounded-full bg-phosphor" />
+        </div>
       </div>
-      <pre className="overflow-x-auto p-4 font-mono text-[12px] leading-relaxed sm:text-[13px]">
+
+      {/* Terminal Screen */}
+      <pre className="min-h-[168px] overflow-x-auto p-3.5 font-mono text-[11.5px] leading-relaxed sm:text-[12.5px]">
         {visible.map((l, i) => (
-          <div key={i} className={COLOR[l.kind]}>
-            {l.kind === "cmd" ? <span className="mr-2 text-signal">$</span> : null}
+          <div key={i} className={`${COLOR[l.kind]} py-0.5`}>
+            {l.kind === "cmd" ? (
+              <span className="mr-2 font-bold text-signal">{promptPrefix}</span>
+            ) : null}
             {l.text}
           </div>
         ))}
         {typing ? (
-          <div className="text-foreground">
-            <span className="mr-2 text-signal">$</span>
+          <div className="py-0.5 text-foreground">
+            <span className="mr-2 font-bold text-signal">{promptPrefix}</span>
             {partial}
             <span className="caret ml-0.5" />
+          </div>
+        ) : count >= lines.length ? (
+          <div className="pt-1.5 text-muted-foreground/60">
+            <span className="mr-2 font-bold text-signal">{promptPrefix}</span>
+            <span className="caret" />
           </div>
         ) : null}
       </pre>
