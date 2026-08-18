@@ -1,6 +1,7 @@
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { REPO, SHIPPED } from "@/lib/armoury";
+import { useSharmoryVersion } from "@/lib/useVersion";
 import { MagneticLink } from "./primitives";
 import { TerminalBlock, type Line } from "./Terminal";
 
@@ -201,6 +202,7 @@ export function Hero() {
   const [pointer, setPointer] = useState({ x: 0.5, y: 0.5 });
   const [shell, setShell] = useState<ShellMode>("zsh");
   const [actionKey, setActionKey] = useState("boot");
+  const { version } = useSharmoryVersion();
 
   const HEADLINES = [
     { text: "YOUR SHELL.", highlight: false },
@@ -250,7 +252,7 @@ export function Hero() {
             <span className="live-dot h-1.5 w-1.5 rounded-full bg-signal" />
             SHARMORY · STATUS: ARMED
           </span>
-          <span className="hidden sm:inline">v1.0 · ZSH &amp; POWERSHELL 5.1+ / CORE 7+ · MIT</span>
+          <span className="hidden sm:inline">{version} · ZSH &amp; POWERSHELL 5.1+ / CORE 7+ · MIT</span>
           <span className="flex items-center gap-1.5 sm:gap-2">
             <span className="live-dot h-1.5 w-1.5 rounded-full bg-phosphor" />
             SYS/UTC <Coords />

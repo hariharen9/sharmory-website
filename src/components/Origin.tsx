@@ -1,33 +1,36 @@
 import { Reveal, SectionHead, MaskLine } from "./primitives";
-
-const TIMELINE = [
-  {
-    year: "2024",
-    tag: "THE SCRATCHPAD",
-    title: "A single dirty .zshrc file",
-    desc: "Started as a handful of quick aliases and functions (mkcd, killport, gacp, gitundo) written late at night to stop retyping the same 3-command sequences.",
-    commands: ["mkcd", "killport", "gacp", "gitundo"],
-    badge: "v0.1 / PERSONAL",
-  },
-  {
-    year: "2025",
-    tag: "THE HARDENING",
-    title: "Error guards, fallbacks, and sprawl",
-    desc: "Grew to 40+ utilities across Docker, Kubernetes, TLS, and language runtimes. Every command was refactored to check dependencies, provide polite Usage: hints, and fail gracefully without crashing the shell.",
-    commands: ["dockernuke", "k8sctx", "certcheck", "apihit"],
-    badge: "v0.6 / SANDBOXED",
-  },
-  {
-    year: "2026",
-    tag: "DUAL-SHELL PARITY",
-    title: "Packaged into a single zero-dependency file",
-    desc: "Ported every single function to Windows PowerShell with 1:1 behavioral parity. Sandboxed tests were added to mock Docker, Kubernetes, and network calls so nothing on the host is touched.",
-    commands: ["sharmory.zsh", "sharmory.ps1", "100% tests"],
-    badge: "v1.0 / MIT OPEN SOURCE",
-  },
-];
+import { useSharmoryVersion } from "@/lib/useVersion";
 
 export function Origin() {
+  const { version } = useSharmoryVersion();
+
+  const TIMELINE = [
+    {
+      year: "2024",
+      tag: "THE SCRATCHPAD",
+      title: "A single dirty .zshrc file",
+      desc: "Started as a handful of quick aliases and functions (mkcd, killport, gacp, gitundo) written late at night to stop retyping the same 3-command sequences.",
+      commands: ["mkcd", "killport", "gacp", "gitundo"],
+      badge: "v0.1 / PERSONAL",
+    },
+    {
+      year: "2025",
+      tag: "THE HARDENING",
+      title: "Error guards, fallbacks, and sprawl",
+      desc: "Grew to 40+ utilities across Docker, Kubernetes, TLS, and language runtimes. Every command was refactored to check dependencies, provide polite Usage: hints, and fail gracefully without crashing the shell.",
+      commands: ["dockernuke", "k8sctx", "certcheck", "apihit"],
+      badge: "v0.6 / SANDBOXED",
+    },
+    {
+      year: "2026",
+      tag: "DUAL-SHELL PARITY",
+      title: "Packaged into a single zero-dependency file",
+      desc: "Ported every single function to Windows PowerShell with 1:1 behavioral parity. Sandboxed tests were added to mock Docker, Kubernetes, and network calls so nothing on the host is touched.",
+      commands: ["sharmory.zsh", "sharmory.ps1", "100% tests"],
+      badge: `${version} / MIT OPEN SOURCE`,
+    },
+  ];
+
   return (
     <section id="origin" className="relative border-b border-hairline">
       <div className="mx-auto max-w-[1600px] px-5 py-20 sm:px-8 sm:py-28">

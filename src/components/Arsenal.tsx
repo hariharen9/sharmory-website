@@ -158,7 +158,7 @@ export function Arsenal() {
                             : "bg-card/30 lg:bg-transparent hover:bg-card/60"
                         }`}
                       >
-                        <div className="flex items-center gap-1.5 sm:gap-2 truncate min-w-0">
+                        <div className="flex items-center gap-1.5 sm:gap-2 truncate min-w-0 flex-1">
                           <span
                             className={`font-mono text-[9.5px] sm:text-[11px] shrink-0 ${
                               on ? "text-primary-foreground font-bold" : "text-signal"
@@ -170,21 +170,23 @@ export function Arsenal() {
                             {c.name}
                           </span>
                         </div>
-                        <span
-                          className={`font-mono text-[9px] sm:text-[11px] tabular-nums shrink-0 ml-1 ${
-                            on ? "text-primary-foreground/90 font-bold" : "text-muted-foreground"
-                          }`}
-                        >
-                          {String(c.tools.length).padStart(2, "0")}
-                        </span>
-                        <span
-                          className={`hidden lg:inline-block transition-transform duration-300 ${
-                            on ? "translate-x-0" : "-translate-x-2 opacity-0"
-                          }`}
-                          aria-hidden
-                        >
-                          →
-                        </span>
+                        <div className="flex items-center gap-3 shrink-0 ml-2">
+                          <span
+                            className={`font-mono text-[9px] sm:text-[11px] tabular-nums ${
+                              on ? "text-primary-foreground/90 font-bold" : "text-muted-foreground"
+                            }`}
+                          >
+                            {String(c.tools.length).padStart(2, "0")}
+                          </span>
+                          <span
+                            className={`hidden lg:inline-block transition-transform duration-300 ${
+                              on ? "translate-x-0" : "-translate-x-2 opacity-0"
+                            }`}
+                            aria-hidden
+                          >
+                            →
+                          </span>
+                        </div>
                       </button>
                     </li>
                   );

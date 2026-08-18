@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { REPO } from "@/lib/armoury";
+import { useSharmoryVersion } from "@/lib/useVersion";
 import { MagneticLink } from "./primitives";
 
 const LINKS = [
@@ -14,6 +15,7 @@ const LINKS = [
 export function Nav() {
   const [solid, setSolid] = useState(false);
   const [open, setOpen] = useState(false);
+  const { version } = useSharmoryVersion();
 
   useEffect(() => {
     const onScroll = () => setSolid(window.scrollY > 24);
@@ -35,7 +37,7 @@ export function Nav() {
           </span>
           <span className="font-mono text-sm tracking-[0.28em]">SHARMORY</span>
           <span className="hidden font-mono text-[10px] text-muted-foreground sm:inline">
-            v1.x
+            {version}
           </span>
         </a>
 
