@@ -1,4 +1,4 @@
-import { CATEGORIES, REPO, SHIPPED } from "@/lib/armoury";
+import { CATEGORIES, REPO } from "@/lib/armoury";
 import { MagneticLink, MaskLine, Ticker, Reveal } from "./primitives";
 
 const NAMES = CATEGORIES.flatMap((c) => c.tools.map((t) => t.name));
@@ -13,103 +13,75 @@ export function Closing() {
       {/* Infinite Command Stream Ticker */}
       <Ticker items={NAMES.slice(0, 30)} />
 
-      {/* Climax Section */}
-      <section className="relative overflow-hidden border-b border-hairline bg-background py-24 sm:py-36">
-        {/* Giant Stroke Watermark with Neon Pulsating Glow */}
+      {/* Climax Section — Centered Brutalist Composition */}
+      <section className="relative flex min-h-[580px] sm:min-h-[660px] flex-col items-center justify-center overflow-hidden border-b border-hairline bg-[#080808] px-5 py-20 text-center sm:px-8 sm:py-28">
+        {/* Giant Outlined Watermark spanning past screen edges */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 flex items-center justify-center overflow-hidden"
+          className="pointer-events-none absolute inset-0 flex items-center justify-center overflow-hidden select-none"
         >
-          <span className="watermark-neon font-mono text-[clamp(6rem,24vw,24rem)] font-black tracking-tighter text-transparent select-none [-webkit-text-stroke:2px_var(--color-signal)]">
+          <span className="font-mono text-[clamp(4.2rem,17.5vw,21rem)] font-bold tracking-tight text-transparent whitespace-nowrap leading-none [-webkit-text-stroke:1.2px_#2c2c28] sm:[-webkit-text-stroke:1.4px_rgba(255,255,255,0.12)]">
             SHARMORY
           </span>
         </div>
 
-        {/* Interactive Grid & Glow */}
+        {/* Ambient Subtle Center Vignette */}
         <div
           aria-hidden
-          className="grid-field pointer-events-none absolute inset-0 opacity-40"
-        />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[32rem] w-[32rem] rounded-full bg-signal/5 blur-[140px]"
+          className="pointer-events-none absolute inset-0 bg-radial-[circle_at_center,rgba(216,255,56,0.04),transparent_40%]"
         />
 
-        {/* Technical Corner Crosshairs */}
-        <div aria-hidden className="pointer-events-none absolute top-6 left-8 font-mono text-sm text-signal/40">
-          +
-        </div>
-        <div aria-hidden className="pointer-events-none absolute top-6 right-8 font-mono text-sm text-signal/40">
-          +
-        </div>
-        <div aria-hidden className="pointer-events-none absolute bottom-6 left-8 font-mono text-sm text-signal/40">
-          +
-        </div>
-        <div aria-hidden className="pointer-events-none absolute bottom-6 right-8 font-mono text-sm text-signal/40">
+        {/* Top Centered Crosshair */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute top-10 left-1/2 -translate-x-1/2 font-mono text-xl text-[#3a3a36]"
+        >
           +
         </div>
 
-        <div className="relative mx-auto max-w-[1600px] px-5 sm:px-8">
-          <div className="flex items-center gap-3 font-mono text-xs tracking-[0.25em] text-signal uppercase">
-            <span className="h-px w-8 bg-signal" />
-            THE COMMAND LINE IS YOURS
+        {/* Foreground Content */}
+        <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center">
+          <div className="font-mono text-[11px] tracking-[0.25em] text-[#888882] uppercase">
+            THE COMMAND LINE IS YOURS.
           </div>
 
-          <h2 className="display mt-6 text-[clamp(3.25rem,13vw,11rem)]">
+          <h2 className="display mt-5 text-[clamp(2.75rem,8.5vw,7.25rem)] leading-[0.88]">
             <MaskLine>ARM</MaskLine>
             <MaskLine delay={0.08}>
               <span className="text-signal">YOURSELF.</span>
             </MaskLine>
           </h2>
 
-          <div className="mt-12 flex flex-col gap-8 border-t border-hairline pt-8 sm:flex-row sm:items-end sm:justify-between">
-            <Reveal>
-              <p className="max-w-lg font-mono text-sm leading-relaxed text-muted-foreground sm:text-base">
-                {SHIPPED} functions. 0 dependencies. Single-file distribution for Zsh &amp; PowerShell.
-                Take the whole armoury or copy the three you need — it&apos;s plain shell either way.
-              </p>
-              <div className="mt-4 flex items-center gap-3 font-mono text-xs text-muted-foreground">
-                <span className="live-dot h-1.5 w-1.5 rounded-full bg-phosphor" />
-                <span>OPEN SOURCE · MIT LICENSED · BUILT FOR THE TERMINAL</span>
-              </div>
-            </Reveal>
+          <Reveal delay={0.16}>
+            <p className="mt-6 font-mono text-xs text-[#787872] sm:text-sm">
+              Open source. MIT licensed. Built for the terminal.
+            </p>
+          </Reveal>
 
-            <div className="flex flex-wrap items-center gap-3">
-              <MagneticLink
-                href="#install"
-                className="group inline-flex items-center gap-3 bg-signal px-7 py-4 font-mono text-xs tracking-[0.22em] text-primary-foreground uppercase transition-shadow hover:shadow-[0_0_0_3px_var(--color-signal)]/30"
-              >
-                LOAD THE ARMOURY
-                <span className="transition-transform duration-300 group-hover:translate-x-1">
-                  →
-                </span>
-              </MagneticLink>
+          <Reveal delay={0.24}>
+            <div className="mt-8 flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
               <MagneticLink
                 href={REPO}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-3 border border-hairline px-7 py-4 font-mono text-xs tracking-[0.22em] uppercase transition-colors hover:border-signal hover:text-signal"
+                className="group inline-flex w-full sm:w-auto justify-center items-center gap-3 bg-signal px-7 py-3.5 font-mono text-xs tracking-[0.16em] font-semibold text-primary-foreground uppercase transition-all hover:shadow-[0_0_25px_rgba(216,255,56,0.2)]"
               >
                 VIEW ON GITHUB ↗
               </MagneticLink>
               <button
                 type="button"
                 onClick={scrollToTop}
-                className="group inline-flex items-center gap-2 border border-hairline px-5 py-4 font-mono text-xs tracking-[0.2em] text-muted-foreground uppercase transition-colors hover:border-signal hover:text-foreground"
-                title="Scroll back to top"
+                className="inline-flex w-full sm:w-auto justify-center items-center gap-2 border border-[#333330] bg-[#0c0c0b] px-6 py-3.5 font-mono text-xs tracking-[0.16em] text-foreground uppercase transition-all hover:border-[#666] hover:text-signal"
               >
-                TOP
-                <span className="transition-transform duration-300 group-hover:-translate-y-1 text-signal">
-                  ↑
-                </span>
+                BACK TO TOP ↑
               </button>
             </div>
-          </div>
+          </Reveal>
         </div>
       </section>
 
       {/* Modern Technical Footer */}
-      <footer className="border-t border-hairline bg-background/50">
+      <footer className="border-t border-hairline bg-[#080808]">
         <div className="mx-auto max-w-[1600px] px-5 py-8 sm:px-8">
           <div className="flex flex-wrap items-center justify-between gap-y-4 font-mono text-[10.5px] tracking-[0.18em] text-muted-foreground uppercase">
             <div className="flex items-center gap-3">

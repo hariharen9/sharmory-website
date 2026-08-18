@@ -226,7 +226,7 @@ export function Hero() {
         if (reduced || e.pointerType !== "mouse") return;
         setPointer({ x: e.clientX / window.innerWidth, y: e.clientY / window.innerHeight });
       }}
-      className="relative flex min-h-[calc(100vh-3.5rem)] flex-col justify-between overflow-hidden border-b border-hairline pt-14"
+      className="relative flex min-h-0 lg:min-h-[calc(100vh-3.5rem)] flex-col justify-between overflow-hidden border-b border-hairline pt-14"
     >
       {/* interactive field */}
       <div
@@ -243,22 +243,22 @@ export function Hero() {
         className="pointer-events-none absolute -top-40 -right-40 h-[36rem] w-[36rem] rounded-full bg-signal/8 blur-[120px]"
       />
 
-      <div className="relative mx-auto flex w-full max-w-[1600px] flex-1 flex-col justify-between px-5 sm:px-8">
+      <div className="relative mx-auto flex w-full max-w-[1600px] flex-1 flex-col justify-between px-4 sm:px-8">
         {/* metadata rail */}
-        <div className="flex flex-wrap items-center justify-between gap-x-8 gap-y-1.5 border-b border-hairline py-2 font-mono text-[9.5px] tracking-[0.2em] text-muted-foreground uppercase">
-          <span className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1.5 border-b border-hairline py-2 font-mono text-[9px] sm:text-[9.5px] tracking-[0.16em] sm:tracking-[0.2em] text-muted-foreground uppercase">
+          <span className="flex items-center gap-1.5 sm:gap-2">
             <span className="live-dot h-1.5 w-1.5 rounded-full bg-signal" />
             SHARMORY / DEV TOOLCHAIN · STATUS: ARMED
           </span>
-          <span className="hidden sm:inline">v1.0 · ZSH &amp; POWERSHELL 5.1+ / CORE 7+ · MIT</span>
-          <span className="flex items-center gap-2">
+          <span className="hidden md:inline">v1.0 · ZSH &amp; POWERSHELL 5.1+ / CORE 7+ · MIT</span>
+          <span className="flex items-center gap-1.5 sm:gap-2">
             <span className="live-dot h-1.5 w-1.5 rounded-full bg-phosphor" />
             SYS/UTC <Coords />
           </span>
         </div>
 
-        {/* Hero Grid — Compact & Balanced */}
-        <div className="my-auto grid items-center gap-8 py-6 lg:grid-cols-12 lg:gap-10 lg:py-8">
+        {/* Hero Grid — Responsive & Touch Friendly */}
+        <div className="my-auto grid items-center gap-8 py-6 sm:py-8 lg:grid-cols-12 lg:gap-10 lg:py-8">
           {/* Left Hero Column */}
           <motion.div
             className="lg:col-span-7"
@@ -269,7 +269,7 @@ export function Hero() {
               THE DEVELOPER&apos;S ARMOURY
             </div>
 
-            <h1 className="display text-[clamp(2.4rem,5.6vw,5.2rem)] leading-[0.9]">
+            <h1 className="display text-[clamp(2.25rem,8.5vw,5.2rem)] leading-[0.9]">
               {HEADLINES.map((h, i) => (
                 <span key={h.text} className="block overflow-hidden">
                   <motion.span
@@ -311,7 +311,7 @@ export function Hero() {
             </motion.p>
 
             <motion.div
-              className="mt-5 flex flex-wrap items-center gap-2.5"
+              className="mt-5 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-2.5"
               {...(reduced
                 ? {}
                 : {
@@ -322,7 +322,7 @@ export function Hero() {
             >
               <MagneticLink
                 href="#install"
-                className="group inline-flex items-center gap-2.5 bg-signal px-5 py-2.5 font-mono text-[11px] tracking-[0.2em] text-primary-foreground uppercase transition-shadow hover:shadow-[0_0_0_3px_var(--color-signal)]/30"
+                className="group inline-flex justify-center items-center gap-2.5 bg-signal px-5 py-3 font-mono text-xs tracking-[0.2em] text-primary-foreground uppercase transition-shadow hover:shadow-[0_0_0_3px_var(--color-signal)]/30"
               >
                 LOAD THE ARMOURY
                 <span className="transition-transform duration-300 group-hover:translate-x-1">
@@ -331,7 +331,7 @@ export function Hero() {
               </MagneticLink>
               <MagneticLink
                 href="#arsenal"
-                className="inline-flex items-center gap-2.5 border border-hairline px-5 py-2.5 font-mono text-[11px] tracking-[0.2em] uppercase transition-colors hover:border-signal hover:text-signal"
+                className="inline-flex justify-center items-center gap-2.5 border border-hairline px-5 py-3 font-mono text-xs tracking-[0.2em] uppercase transition-colors hover:border-signal hover:text-signal"
               >
                 EXPLORE COMMANDS ↓
               </MagneticLink>
@@ -339,14 +339,14 @@ export function Hero() {
                 href={REPO}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2.5 border border-hairline px-4 py-2.5 font-mono text-[11px] tracking-[0.2em] uppercase transition-colors hover:border-signal hover:text-signal"
+                className="inline-flex justify-center items-center gap-2.5 border border-hairline px-4 py-3 font-mono text-xs tracking-[0.2em] uppercase transition-colors hover:border-signal hover:text-signal"
               >
                 GITHUB ↗
               </MagneticLink>
             </motion.div>
 
             {/* Left Stats Row */}
-            <div className="mt-6 grid max-w-md grid-cols-3 border-t border-hairline pt-3 font-mono text-[9.5px] tracking-[0.16em] text-muted-foreground uppercase">
+            <div className="mt-6 grid max-w-md grid-cols-3 border-t border-hairline pt-3 font-mono text-[9px] sm:text-[9.5px] tracking-[0.16em] text-muted-foreground uppercase">
               <div>
                 <div className="display text-xl text-foreground sm:text-2xl">{SHIPPED}</div>
                 functions
@@ -371,7 +371,7 @@ export function Hero() {
               <span className="absolute -top-2.5 -left-2.5 hidden h-10 w-10 border-t border-l border-signal/60 lg:block" />
 
               {/* Shell Selector Bar */}
-              <div className="mb-1.5 flex items-center justify-between border border-hairline bg-card/60 px-2.5 py-1 font-mono text-[9.5px]">
+              <div className="mb-1.5 flex items-center justify-between border border-hairline bg-card/60 px-2.5 py-1.5 font-mono text-[9.5px]">
                 <span className="tracking-[0.16em] text-muted-foreground uppercase">
                   ACTIVE SHELL:
                 </span>
@@ -382,7 +382,7 @@ export function Hero() {
                       setShell("zsh");
                       setActionKey("boot");
                     }}
-                    className={`px-2 py-0.5 tracking-wider uppercase transition-colors ${
+                    className={`px-2 py-1 tracking-wider uppercase transition-colors ${
                       shell === "zsh"
                         ? "bg-signal font-bold text-primary-foreground"
                         : "border border-hairline text-muted-foreground hover:text-foreground"
@@ -396,7 +396,7 @@ export function Hero() {
                       setShell("pwsh");
                       setActionKey("boot");
                     }}
-                    className={`px-2 py-0.5 tracking-wider uppercase transition-colors ${
+                    className={`px-2 py-1 tracking-wider uppercase transition-colors ${
                       shell === "pwsh"
                         ? "bg-signal font-bold text-primary-foreground"
                         : "border border-hairline text-muted-foreground hover:text-foreground"
@@ -415,7 +415,7 @@ export function Hero() {
                 promptPrefix={promptPrefix}
               />
 
-              {/* Interactive Command Pills Grid */}
+              {/* Interactive Command Pills Grid (Horizontal swipe on mobile, wrap on desktop) */}
               <div className="mt-2 border border-hairline bg-card/40 p-2 font-mono text-[9.5px]">
                 <div className="mb-1.5 flex items-center justify-between border-b border-hairline pb-1">
                   <span className="tracking-wider text-muted-foreground/80 uppercase">
@@ -423,13 +423,13 @@ export function Hero() {
                   </span>
                   <span className="text-signal">{commandKeys.length} SCENARIOS</span>
                 </div>
-                <div className="flex flex-wrap gap-1">
+                <div className="flex overflow-x-auto no-scrollbar sm:flex-wrap gap-1 pb-0.5">
                   {commandKeys.map((k) => (
                     <button
                       key={k}
                       type="button"
                       onClick={() => setActionKey(k)}
-                      className={`border px-1.5 py-0.5 transition-colors ${
+                      className={`shrink-0 border px-2 py-1 transition-colors ${
                         actionKey === k
                           ? "border-signal bg-signal/20 font-semibold text-signal"
                           : "border-hairline text-muted-foreground hover:border-signal/50 hover:text-foreground"

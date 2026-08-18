@@ -132,36 +132,38 @@ export function Arsenal() {
         ) : (
           /* Default Loadout View */
           <div className="mt-6 grid lg:grid-cols-12">
-            {/* rack */}
+            {/* rack (horizontal scroll tabs on mobile, vertical list on desktop) */}
             <div className="lg:col-span-4 lg:border-r lg:border-hairline">
-              <ul>
+              <ul className="flex overflow-x-auto no-scrollbar lg:flex-col gap-1.5 pb-3 lg:pb-0 border-b border-hairline lg:border-b-0">
                 {CATEGORIES.map((c) => {
                   const on = c.id === active;
                   return (
-                    <li key={c.id}>
+                    <li key={c.id} className="shrink-0 lg:shrink">
                       <button
                         type="button"
                         onClick={() => setActive(c.id)}
                         aria-pressed={on}
-                        className={`group flex w-full items-center gap-4 border-b border-hairline px-1 py-5 text-left transition-colors lg:pr-6 ${
-                          on ? "bg-signal text-primary-foreground" : "hover:bg-card/60"
+                        className={`group flex items-center gap-2.5 sm:gap-4 border lg:border-0 lg:border-b border-hairline px-3 py-2 lg:px-1 lg:py-5 text-left transition-colors lg:w-full lg:pr-6 ${
+                          on ? "bg-signal text-primary-foreground font-semibold" : "bg-card/30 lg:bg-transparent hover:bg-card/60"
                         }`}
                       >
                         <span
-                          className={`font-mono text-[11px] ${on ? "" : "text-signal"}`}
+                          className={`font-mono text-[10px] sm:text-[11px] ${on ? "" : "text-signal"}`}
                         >
                           [{c.index}]
                         </span>
-                        <span className="display flex-1 text-lg sm:text-xl">{c.name}</span>
+                        <span className="font-mono text-xs sm:text-sm lg:display lg:flex-1 lg:text-xl uppercase whitespace-nowrap">
+                          {c.name}
+                        </span>
                         <span
-                          className={`font-mono text-[11px] tabular-nums ${
+                          className={`font-mono text-[10px] sm:text-[11px] tabular-nums ${
                             on ? "" : "text-muted-foreground"
                           }`}
                         >
                           {String(c.tools.length).padStart(2, "0")}
                         </span>
                         <span
-                          className={`transition-transform duration-300 ${
+                          className={`hidden lg:inline-block transition-transform duration-300 ${
                             on ? "translate-x-0" : "-translate-x-2 opacity-0"
                           }`}
                           aria-hidden
