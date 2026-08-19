@@ -248,6 +248,19 @@ export function Hero() {
   const title =
     shell === "zsh" ? "zsh — ~/.sharmory/functions.zsh" : "pwsh — Microsoft.PowerShell_profile.ps1";
 
+  const [copiedHeroInstall, setCopiedHeroInstall] = useState(false);
+
+  const installCmd =
+    shell === "zsh"
+      ? "curl -fsSL https://raw.githubusercontent.com/hariharen9/sharmory/main/install.sh | bash"
+      : "irm https://raw.githubusercontent.com/hariharen9/sharmory/main/install.ps1 | iex";
+
+  const handleCopyHeroInstall = (cmd: string) => {
+    void navigator.clipboard?.writeText(cmd);
+    setCopiedHeroInstall(true);
+    window.setTimeout(() => setCopiedHeroInstall(false), 1600);
+  };
+
   const commandKeys = Object.keys(shell === "zsh" ? ZSH_SCRIPTS : PWSH_SCRIPTS);
 
   return (
@@ -306,14 +319,14 @@ export function Hero() {
                     {...(reduced
                       ? {}
                       : {
-                          initial: { y: "110%" },
-                          animate: { y: "0%" },
-                          transition: {
-                            duration: 0.9,
-                            delay: 0.08 + i * 0.1,
-                            ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
-                          },
-                        })}
+                        initial: { y: "110%" },
+                        animate: { y: "0%" },
+                        transition: {
+                          duration: 0.9,
+                          delay: 0.08 + i * 0.1,
+                          ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
+                        },
+                      })}
                   >
                     {h.text}
                   </motion.span>
@@ -326,15 +339,15 @@ export function Hero() {
               {...(reduced
                 ? {}
                 : {
-                    initial: { opacity: 0, y: 12 },
-                    animate: { opacity: 1, y: 0 },
-                    transition: { duration: 0.6, delay: 0.3 },
-                  })}
+                  initial: { opacity: 0, y: 12 },
+                  animate: { opacity: 1, y: 0 },
+                  transition: { duration: 0.6, delay: 0.3 },
+                })}
             >
               A single-file arsenal of sharp, practical utilities for developers who&apos;d rather
               type one command than write ten.{" "}
               <span className="text-foreground font-semibold">
-                {SHIPPED} functions ready to source in 8 seconds.
+                {SHIPPED} functions ready to source in 3 seconds.
               </span>{" "}
               No plugin manager. No framework. Zero startup tax.
             </motion.p>
@@ -345,10 +358,10 @@ export function Hero() {
               {...(reduced
                 ? {}
                 : {
-                    initial: { opacity: 0 },
-                    animate: { opacity: 1 },
-                    transition: { duration: 0.5, delay: 0.45 },
-                  })}
+                  initial: { opacity: 0 },
+                  animate: { opacity: 1 },
+                  transition: { duration: 0.5, delay: 0.45 },
+                })}
             >
               <MagneticLink
                 href="#install"
@@ -392,6 +405,65 @@ export function Hero() {
                 dependencies
               </div>
             </div>
+
+            {/* Quick 1-Line Installer Snippet in Hero */}
+            <motion.div
+              className="mt-4 w-full max-w-xl border border-hairline bg-card/45 p-2.5 sm:p-3 transition-colors hover:border-signal/80"
+              {...(reduced
+                ? {}
+                : {
+                  initial: { opacity: 0, y: 10 },
+                  animate: { opacity: 1, y: 0 },
+                  transition: { duration: 0.5, delay: 0.5 },
+                })}
+            >
+              <div className="flex items-center justify-between border-b border-hairline/70 pb-1.5 font-mono text-[9.5px] sm:text-[10px]">
+                <div className="flex items-center gap-1.5 text-muted-foreground uppercase tracking-wider">
+                  <span className="live-dot h-1.5 w-1.5 rounded-full bg-signal" />
+                  <span className="text-foreground font-semibold">QUICK INSTALL</span>
+                  <span className="hidden sm:inline text-muted-foreground/70">· ZERO-DEP SOURCING</span>
+                </div>
+
+                <div className="flex items-center gap-1">
+                  <button
+                    type="button"
+                    onClick={() => setShell("zsh")}
+                    className={`px-2 py-0.5 rounded-xs font-mono text-[9px] uppercase transition-colors ${shell === "zsh"
+                        ? "bg-signal text-primary-foreground font-bold"
+                        : "text-muted-foreground hover:text-foreground border border-hairline/60"
+                      }`}
+                  >
+                    ⌘ ZSH
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setShell("pwsh")}
+                    className={`px-2 py-0.5 rounded-xs font-mono text-[9px] uppercase transition-colors ${shell === "pwsh"
+                        ? "bg-signal text-primary-foreground font-bold"
+                        : "text-muted-foreground hover:text-foreground border border-hairline/60"
+                      }`}
+                  >
+                    ⊞ PWSH
+                  </button>
+                </div>
+              </div>
+
+              <div
+                onClick={() => handleCopyHeroInstall(installCmd)}
+                className="group mt-2 flex cursor-pointer items-center justify-between gap-2 overflow-hidden bg-background/60 px-2.5 py-1.5 sm:py-2 border border-hairline transition-all hover:border-signal hover:bg-background/80"
+              >
+                <code className="font-mono text-xs text-foreground/90 group-hover:text-signal truncate font-semibold">
+                  <span className="text-signal mr-1.5 font-bold select-none">{promptPrefix}</span>
+                  <span>{installCmd}</span>
+                </code>
+                <button
+                  type="button"
+                  className="shrink-0 bg-signal/15 px-2.5 py-1 font-mono text-[10px] font-bold text-signal border border-signal/30 uppercase transition-all group-hover:bg-signal group-hover:text-primary-foreground"
+                >
+                  {copiedHeroInstall ? "✓ COPIED" : "COPY"}
+                </button>
+              </div>
+            </motion.div>
           </motion.div>
 
           {/* Right Hero Column: Interactive Terminal */}
@@ -410,11 +482,10 @@ export function Hero() {
                     setShell("zsh");
                     setActionKey("boot");
                   }}
-                  className={`py-1.5 px-2 text-center tracking-wider uppercase transition-colors ${
-                    shell === "zsh"
+                  className={`py-1.5 px-2 text-center tracking-wider uppercase transition-colors ${shell === "zsh"
                       ? "bg-signal font-bold text-primary-foreground shadow-sm"
                       : "text-muted-foreground hover:text-foreground"
-                  }`}
+                    }`}
                 >
                   ⌘ ZSH / UNIX
                 </button>
@@ -424,11 +495,10 @@ export function Hero() {
                     setShell("pwsh");
                     setActionKey("boot");
                   }}
-                  className={`py-1.5 px-2 text-center tracking-wider uppercase transition-colors ${
-                    shell === "pwsh"
+                  className={`py-1.5 px-2 text-center tracking-wider uppercase transition-colors ${shell === "pwsh"
                       ? "bg-signal font-bold text-primary-foreground shadow-sm"
                       : "text-muted-foreground hover:text-foreground"
-                  }`}
+                    }`}
                 >
                   ⊞ POWERSHELL
                 </button>
@@ -456,11 +526,10 @@ export function Hero() {
                       key={k}
                       type="button"
                       onClick={() => setActionKey(k)}
-                      className={`border px-2 py-1 transition-colors ${
-                        actionKey === k
+                      className={`border px-2 py-1 transition-colors ${actionKey === k
                           ? "border-signal bg-signal/20 font-semibold text-signal"
                           : "border-hairline text-muted-foreground hover:border-signal/50 hover:text-foreground"
-                      }`}
+                        }`}
                     >
                       {k === "boot" ? "reset" : `$ ${k}`}
                     </button>
