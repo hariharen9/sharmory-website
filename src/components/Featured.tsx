@@ -98,7 +98,7 @@ export function Featured() {
     <section id="featured" className="relative border-b border-hairline bg-background">
       <div className="mx-auto max-w-[1600px] px-5 py-20 sm:px-8 sm:py-28">
         <SectionHead
-          index="04"
+          index="05"
           title="FIELD TESTED / THE HEAVY HITTERS"
           note="9 battle-proven daily drivers"
         />

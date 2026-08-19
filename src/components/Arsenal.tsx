@@ -46,7 +46,7 @@ export function Arsenal() {
     <section id="arsenal" className="relative w-full max-w-full overflow-hidden border-b border-hairline bg-background">
       <div className="mx-auto max-w-[1600px] min-w-0 px-4 py-16 sm:px-8 sm:py-28">
         <SectionHead
-          index="03"
+          index="04"
           title="THE ARSENAL"
           note={`${TOTAL_TOOLS} of ${SHIPPED} catalogued · ${CATEGORIES.length} loadouts`}
         />

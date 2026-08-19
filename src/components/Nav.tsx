@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import { REPO } from "@/lib/armoury";
 import { useSharmoryVersion } from "@/lib/useVersion";
 import { MagneticLink } from "./primitives";
+import { ThemeToggle } from "./ThemeToggle";
 
 const LINKS = [
   { href: "#why", label: "WHY" },
   { href: "#origin", label: "ORIGIN" },
+  { href: "#parity", label: "PARITY" },
   { href: "#arsenal", label: "ARSENAL" },
   { href: "#featured", label: "FEATURED" },
   { href: "#landscape", label: "LANDSCAPE" },
@@ -32,16 +34,20 @@ export function Nav() {
     >
       <nav className="mx-auto flex h-14 max-w-[1600px] items-center justify-between px-5 sm:px-8">
         <a href="#top" className="group flex items-center gap-3">
-          <span className="grid h-6 w-6 place-items-center border border-signal font-mono text-[11px] text-signal transition-colors group-hover:bg-signal group-hover:text-primary-foreground">
-            S
-          </span>
+          <img
+            src="/apple-touch-icon.png"
+            alt="Sharmory Logo"
+            className="h-8 w-8 object-contain transition-transform duration-200 group-hover:scale-105"
+            width={32}
+            height={32}
+          />
           <span className="font-mono text-sm tracking-[0.28em]">SHARMORY</span>
           <span className="hidden font-mono text-[10px] text-muted-foreground sm:inline">
             {version}
           </span>
         </a>
 
-        <div className="hidden items-center gap-8 md:flex">
+        <div className="hidden items-center gap-6 md:flex">
           {LINKS.map((l) => (
             <a
               key={l.href}
@@ -51,6 +57,7 @@ export function Nav() {
               {l.label}
             </a>
           ))}
+          <ThemeToggle />
           <MagneticLink
             href={REPO}
             target="_blank"
@@ -61,19 +68,26 @@ export function Nav() {
           </MagneticLink>
         </div>
 
-        <button
-          type="button"
-          aria-label="Toggle navigation"
-          aria-expanded={open}
-          onClick={() => setOpen((v) => !v)}
-          className="border border-hairline px-3 py-1.5 font-mono text-[11px] tracking-[0.2em] md:hidden"
-        >
-          {open ? "CLOSE" : "MENU"}
-        </button>
+        <div className="flex items-center gap-2 md:hidden">
+          <ThemeToggle compact />
+          <button
+            type="button"
+            aria-label="Toggle navigation"
+            aria-expanded={open}
+            onClick={() => setOpen((v) => !v)}
+            className="border border-hairline px-3 py-1.5 font-mono text-[11px] tracking-[0.2em]"
+          >
+            {open ? "CLOSE" : "MENU"}
+          </button>
+        </div>
       </nav>
 
       {open ? (
         <div className="border-t border-hairline bg-background md:hidden">
+          <div className="flex items-center justify-between border-b border-hairline px-5 py-3 font-mono text-xs">
+            <span className="text-muted-foreground">COLOR SCHEME</span>
+            <ThemeToggle />
+          </div>
           {[...LINKS, { href: REPO, label: "GITHUB ↗" }].map((l) => (
             <a
               key={l.label}

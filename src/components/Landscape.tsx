@@ -47,7 +47,7 @@ export function Landscape() {
   return (
     <section id="landscape" className="relative border-b border-hairline bg-background">
       <div className="mx-auto max-w-[1600px] px-5 py-20 sm:px-8 sm:py-28">
-        <SectionHead index="05" title="WHERE IT SITS / LANDSCAPE" note="the positioning matrix" />
+        <SectionHead index="06" title="WHERE IT SITS / LANDSCAPE" note="the positioning matrix" />
 
         <div className="pt-12">
           <h3 className="display text-[clamp(2rem,5vw,3.75rem)]">

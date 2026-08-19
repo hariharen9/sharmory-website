@@ -12,7 +12,7 @@ const ZSH_SCRIPTS: Record<string, { label: string; lines: Line[] }> = {
     label: "boot",
     lines: [
       { kind: "cmd", text: "source ~/.sharmory/functions.zsh" },
-      { kind: "ok", text: "  ✓ 98 functions armed  ·  0 plugins  ·  0ms startup tax" },
+      { kind: "ok", text: "  ✓ 125 functions armed  ·  0 plugins  ·  0ms startup tax" },
       { kind: "cmd", text: "killport 3000" },
       { kind: "out", text: "  pid 41288 (node) → SIGTERM → released :3000" },
       { kind: "cmd", text: "gacp 'fix: drop the dead branch'" },
@@ -99,7 +99,7 @@ const PWSH_SCRIPTS: Record<string, { label: string; lines: Line[] }> = {
     label: "boot",
     lines: [
       { kind: "cmd", text: ". $PROFILE" },
-      { kind: "ok", text: "  ✓ 98 Sharmory functions armed (PowerShell 7.4+)" },
+      { kind: "ok", text: "  ✓ 125 Sharmory functions armed (PowerShell 7.4+)" },
       { kind: "cmd", text: "killport 5432" },
       { kind: "out", text: "  PID 12904 (postgres.exe) terminated" },
       { kind: "cmd", text: "k8sctx prod-cluster" },
@@ -180,15 +180,45 @@ const PWSH_SCRIPTS: Record<string, { label: string; lines: Line[] }> = {
   },
 };
 
-function Coords() {
-  const [t, setT] = useState("--:--:--");
+function SystemClock() {
+  const [time, setTime] = useState("--:--:--");
+  const [tz, setTz] = useState("LOCAL");
+
   useEffect(() => {
-    const tick = () => setT(new Date().toISOString().slice(11, 19) + "Z");
+    try {
+      const tzName =
+        new Intl.DateTimeFormat(undefined, { timeZoneName: "short" })
+          .formatToParts(new Date())
+          .find((p) => p.type === "timeZoneName")?.value || "LOCAL";
+      setTz(tzName.replace(/\s+/g, ""));
+    } catch {
+      setTz("LOCAL");
+    }
+
+    const tick = () => {
+      const now = new Date();
+      setTime(
+        now.toLocaleTimeString(undefined, {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          hour12: false,
+        })
+      );
+    };
+
     tick();
     const id = window.setInterval(tick, 1000);
     return () => window.clearInterval(id);
   }, []);
-  return <span className="tabular-nums">{t}</span>;
+
+  return (
+    <span className="flex items-center gap-1.5 sm:gap-2">
+      <span className="live-dot h-1.5 w-1.5 rounded-full bg-phosphor" />
+      <span>SYS/{tz}</span>
+      <span className="tabular-nums">{time}</span>
+    </span>
+  );
 }
 
 export function Hero() {
@@ -253,10 +283,7 @@ export function Hero() {
             SHARMORY · STATUS: ARMED
           </span>
           <span className="hidden sm:inline">{version} · ZSH &amp; POWERSHELL 5.1+ / CORE 7+ · MIT</span>
-          <span className="flex items-center gap-1.5 sm:gap-2">
-            <span className="live-dot h-1.5 w-1.5 rounded-full bg-phosphor" />
-            SYS/UTC <Coords />
-          </span>
+          <SystemClock />
         </div>
 
         {/* Hero Grid */}

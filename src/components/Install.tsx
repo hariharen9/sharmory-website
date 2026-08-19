@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { REPO } from "@/lib/armoury";
+import { REPO, SHIPPED } from "@/lib/armoury";
 import { Reveal, SectionHead, Counter, MaskLine } from "./primitives";
 
 const STEPS = [
@@ -100,7 +100,7 @@ export function Install() {
   return (
     <section id="install" className="relative border-b border-hairline bg-background">
       <div className="mx-auto max-w-[1600px] px-5 py-20 sm:px-8 sm:py-28">
-        <SectionHead index="06" title="ARM YOUR SHELL" note="≈ 8 seconds setup" />
+        <SectionHead index="07" title="ARM YOUR SHELL" note="≈ 8 seconds setup" />
 
         <div className="pt-12">
           <h3 className="display text-[clamp(2rem,5vw,3.75rem)]">
@@ -217,7 +217,7 @@ export function Install() {
         {/* proof metrics strip */}
         <div className="mt-20 grid border-y border-hairline sm:grid-cols-2 lg:grid-cols-4">
           {[
-            { v: 98, s: "", k: "FUNCTIONS SHIPPED" },
+            { v: SHIPPED, s: "", k: "FUNCTIONS SHIPPED" },
             { v: 100, s: "%", k: "SANDBOXED TEST COVERAGE" },
             { v: 2, s: "", k: "SHELLS, ONE API" },
             { v: 0, s: "", k: "RUNTIME DEPENDENCIES" },

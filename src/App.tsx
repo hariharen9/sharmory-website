@@ -2,6 +2,7 @@ import { Nav } from "@/components/Nav";
 import { Hero } from "@/components/Hero";
 import { Why } from "@/components/Why";
 import { Origin } from "@/components/Origin";
+import { Parity } from "@/components/Parity";
 import { Arsenal } from "@/components/Arsenal";
 import { Featured } from "@/components/Featured";
 import { Landscape } from "@/components/Landscape";
@@ -36,6 +37,7 @@ export default function App() {
         />
         <Why />
         <Origin />
+        <Parity />
         <Arsenal />
         <Featured />
         <Landscape />
