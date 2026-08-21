@@ -1,227 +1,211 @@
 import { useState } from "react";
+import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { REPO, SHIPPED } from "@/lib/armoury";
-import { Reveal, SectionHead, Counter, MaskLine } from "./primitives";
+import { Reveal, SectionHead, Counter } from "./primitives";
+import {
+  SiHomebrew,
+  SiNpm,
+  SiPypi,
+  SiApple,
+  SiLinux,
+  SiGnubash,
+} from "react-icons/si";
+import { FaWindows } from "react-icons/fa6";
+import { VscTerminalPowershell } from "react-icons/vsc";
 
-const STEPS = [
-  {
-    n: "01",
-    title: "PIPE IT IN",
-    body: "One curl (or irm) writes the file and wires your rc / $PROFILE. Nothing else on your system is touched.",
-  },
-  {
-    n: "02",
-    title: "SOURCE ONCE",
-    body: "A single source. Zero plugin managers, zero lazy-loading hacks, and no measurable startup delay.",
-  },
-  {
-    n: "03",
-    title: "STAY CURRENT",
-    body: "Run sharmory-update anytime to pull the latest arsenal in place across both shells.",
-  },
-  {
-    n: "04",
-    title: "TRUST IT",
-    body: "100% sandboxed test suite mocks docker, kubectl, curl and DNS — zero side effects on your host machine.",
-  },
+/* ─────────────────────────────────────────────
+   DATA
+───────────────────────────────────────────── */
+const UNIX_CMD =
+  "curl -fsSL https://raw.githubusercontent.com/hariharen9/sharmory/main/install.sh | bash";
+const WIN_CMD =
+  "irm https://raw.githubusercontent.com/hariharen9/sharmory/main/install.ps1 | iex";
+
+const DETECTION_STEPS = [
+  { label: "install.sh runs", note: "single curl pipe" },
+  { label: "detects $SHELL", note: "zsh / bash / sh" },
+  { label: "writes functions file", note: "~/.sharmory/" },
+  { label: "wires rc file", note: ".zshrc or .bashrc" },
+  { label: "done", note: "< 5 seconds" },
 ];
 
-const SNIPPETS = [
-  {
-    id: "zsh",
-    sigil: "⌘",
-    badge: "RECOMMENDED · ZERO-DEP",
-    os: "macOS / Linux / WSL",
-    shell: "ZSH",
-    prompt: "$",
-    cmd: "curl -fsSL https://raw.githubusercontent.com/hariharen9/sharmory/main/install.sh | bash",
-    note: "Writes ~/.sharmory/functions.zsh and safely wires your .zshrc",
-  },
-  {
-    id: "pwsh",
-    sigil: "⊞",
-    badge: "RECOMMENDED · ZERO-DEP",
-    os: "Windows 10 / 11 / Server",
-    shell: "POWERSHELL 5.1+ / 7+",
-    prompt: "PS>",
-    cmd: "irm https://raw.githubusercontent.com/hariharen9/sharmory/main/install.ps1 | iex",
-    note: "Writes ~/.sharmory/functions.ps1 and wires your $PROFILE",
-  },
+const UNIX_TERMINAL_LINES = [
+  { kind: "cmd", text: UNIX_CMD },
+  { kind: "out", text: "  → Downloading sharmory v2.1.0..." },
+  { kind: "out", text: "  → Detected shell: zsh (5.9)" },
+  { kind: "ok",  text: "  ✓ Wrote ~/.sharmory/functions.zsh" },
+  { kind: "ok",  text: "  ✓ Sourced in ~/.zshrc" },
+  { kind: "ok",  text: "  ✓ 142 functions armed. Restart or: source ~/.zshrc" },
 ];
 
-const ACTIVE_MANAGERS = [
+const WIN_TERMINAL_LINES = [
+  { kind: "cmd", text: WIN_CMD },
+  { kind: "out", text: "  → Downloading sharmory v2.1.0..." },
+  { kind: "ok",  text: "  ✓ Wrote C:\\Users\\You\\.sharmory\\functions.ps1" },
+  { kind: "ok",  text: "  ✓ Sourced in $PROFILE" },
+  { kind: "ok",  text: "  ✓ 142 functions armed. Restart or: . $PROFILE" },
+];
+
+const LIFECYCLE = [
+  { n: "01", title: "PIPE IT IN",   body: "One curl (or irm). The script detects your shell, writes the functions file, and wires your rc automatically." },
+  { n: "02", title: "SOURCE ONCE", body: "No plugin managers, no lazy-loading hacks, no measurable startup delay. Pure shell functions." },
+  { n: "03", title: "STAY CURRENT", body: "Run sharmory-update to pull the latest arsenal in-place. No re-install, no PATH changes." },
+  { n: "04", title: "TRUST IT",    body: "100% sandboxed tests mock docker, kubectl, curl and DNS — zero side effects on your machine." },
+];
+
+const PKG_MANAGERS = [
   {
     id: "brew",
     name: "Homebrew",
     platform: "macOS / Linux",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4 text-[#FBB829]">
-        <path d="M19 6h-1V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v14a4 4 0 0 0 4 4h8a4 4 0 0 0 4-4v-1h1a3 3 0 0 0 3-3V9a3 3 0 0 0-3-3zm-3 12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4h12v14zm4-3a1 1 0 0 1-1 1h-1V8h1a1 1 0 0 1 1 1v6z" />
-        <path d="M6 7h8v2H6zm0 3h8v2H6zm0 3h6v2H6z" opacity="0.6" />
-      </svg>
-    ),
     cmd: "brew install hariharen9/tap/sharmory",
-    status: "LIVE (SHA MATCH)",
+    status: "LIVE",
+    statusColor: "text-phosphor border-phosphor/50 bg-phosphor/10",
     link: "https://github.com/hariharen9/homebrew-tap",
-    linkText: "hariharen9/tap",
+    icon: <SiHomebrew className="h-4 w-4 text-[#FBB829]" />,
   },
   {
     id: "scoop",
     name: "Scoop",
     platform: "Windows",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 text-[#43B883]">
-        <path d="M4 19a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9a6 6 0 0 0-6-6h-4a6 6 0 0 0-6 6v10z" fill="currentColor" fillOpacity="0.25" />
-        <path d="M9 3v4" />
-        <path d="M15 3v4" />
-        <path d="M4 11h16" />
-      </svg>
-    ),
     cmd: "scoop bucket add hariharen9 https://github.com/hariharen9/scoop-bucket; scoop install sharmory",
-    status: "LIVE (JSON VALID)",
+    status: "LIVE",
+    statusColor: "text-phosphor border-phosphor/50 bg-phosphor/10",
     link: "https://github.com/hariharen9/scoop-bucket",
-    linkText: "hariharen9/scoop-bucket",
+    icon: <FaWindows className="h-4 w-4 text-[#43B883]" />,
   },
   {
     id: "npm",
     name: "npm",
-    platform: "Node.js / Global",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4 text-[#CB3837]">
-        <path d="M1.5 1.5v21h21V1.5H1.5zm16.5 16.5h-3v-9h-3v9H4.5V6h13.5v12z" />
-      </svg>
-    ),
+    platform: "Node.js",
     cmd: "npm i -g sharmory",
-    status: "LIVE v0.1.0",
+    status: "LIVE",
+    statusColor: "text-phosphor border-phosphor/50 bg-phosphor/10",
     link: "https://www.npmjs.com/package/sharmory",
-    linkText: "npmjs.com/package/sharmory",
+    icon: <SiNpm className="h-4 w-4 text-[#CB3837]" />,
   },
   {
     id: "pypi",
-    name: "PyPI / pip",
-    platform: "Python / Global",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 text-[#3776AB]">
-        <path d="M12 2L2 7l10 5 10-5-10-5z" fill="currentColor" fillOpacity="0.2" />
-        <path d="M2 17l10 5 10-5" />
-        <path d="M2 12l10 5 10-5" />
-      </svg>
-    ),
+    name: "pip",
+    platform: "Python",
     cmd: "pip install sharmory",
-    status: "LIVE v0.1.0",
+    status: "LIVE",
+    statusColor: "text-phosphor border-phosphor/50 bg-phosphor/10",
     link: "https://pypi.org/project/sharmory/",
-    linkText: "pypi.org/project/sharmory",
+    icon: <SiPypi className="h-4 w-4 text-[#3776AB]" />,
+  },
+  {
+    id: "winget",
+    name: "WinGet",
+    platform: "Windows",
+    cmd: "winget install sharmory",
+    status: "SOON",
+    statusColor: "text-muted-foreground border-hairline bg-card/20",
+    link: REPO,
+    icon: <FaWindows className="h-4 w-4 text-[#0078D4]" />,
   },
 ];
 
-const PLANNED_MANAGERS = [
-  { name: "WinGet", cmd: "winget install sharmory", status: "PLANNED" },
-  { name: "Cargo", cmd: "cargo install sharmory", status: "PLANNED" },
-];
-
-function CopyRow({
-  sigil,
-  badge,
-  os,
-  shell,
+/* ─────────────────────────────────────────────
+   MINI COMPONENTS
+───────────────────────────────────────────── */
+function MiniTerminal({
+  lines,
   prompt,
-  cmd,
-  note,
+  title,
 }: {
-  sigil: string;
-  badge: string;
-  os: string;
-  shell: string;
+  lines: { kind: string; text: string }[];
   prompt: string;
-  cmd: string;
-  note: string;
+  title: string;
 }) {
-  const [copied, setCopied] = useState(false);
+  const reduced = useReducedMotion();
   return (
-    <div
-      onClick={() => {
-        void navigator.clipboard?.writeText(cmd);
-        setCopied(true);
-        window.setTimeout(() => setCopied(false), 1800);
-      }}
-      className="group relative cursor-pointer border-2 border-signal/40 bg-card/75 p-0 transition-all duration-300 hover:border-signal hover:bg-card/95 hover:shadow-[0_0_35px_color-mix(in_oklab,var(--color-signal)_14%,transparent)]"
-    >
-      {/* Top Header Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-hairline/80 bg-card/60 px-4 py-3 sm:px-5">
-        <div className="flex items-center gap-2.5 font-mono text-xs sm:text-sm">
-          <span className="grid h-6 w-6 place-items-center bg-signal/15 text-sm font-bold text-signal border border-signal/30">
-            {sigil}
-          </span>
-          <span className="font-bold text-foreground tracking-wide">{os}</span>
-          <span className="font-mono text-[10.5px] text-signal font-semibold px-2 py-0.5 border border-signal/30 bg-signal/10">
-            [{shell}]
-          </span>
+    <div className="overflow-hidden border border-hairline bg-[#0a0a0a] font-mono text-xs leading-relaxed">
+      {/* chrome bar */}
+      <div className="flex items-center justify-between border-b border-hairline/60 bg-card/60 px-3 py-2">
+        <div className="flex items-center gap-1.5">
+          <span className="h-2.5 w-2.5 rounded-full bg-[#FF5F56]/80" />
+          <span className="h-2.5 w-2.5 rounded-full bg-[#FFBD2E]/80" />
+          <span className="h-2.5 w-2.5 rounded-full bg-[#27C93F]/80" />
         </div>
-
-        <div className="flex items-center gap-3">
-          <span className="hidden sm:inline font-mono text-[9.5px] font-semibold text-phosphor tracking-wider">
-            {badge}
-          </span>
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              void navigator.clipboard?.writeText(cmd);
-              setCopied(true);
-              window.setTimeout(() => setCopied(false), 1800);
-            }}
-            className="flex items-center gap-1.5 bg-signal px-3.5 py-1.5 font-mono text-[11px] font-bold tracking-[0.16em] text-primary-foreground uppercase shadow-sm transition-all hover:opacity-90 active:scale-95"
+        <span className="text-[10px] text-muted-foreground/60 tracking-wider">{title}</span>
+        <span className="text-[10px] text-phosphor/60">●</span>
+      </div>
+      {/* output */}
+      <div className="space-y-1.5 p-4">
+        {lines.map((line, i) => (
+          <motion.div
+            key={i}
+            {...(reduced
+              ? {}
+              : {
+                  initial: { opacity: 0, x: -4 },
+                  animate: { opacity: 1, x: 0 },
+                  transition: { delay: i * 0.18, duration: 0.3 },
+                })}
+            className={
+              line.kind === "cmd"
+                ? "flex items-start gap-2"
+                : line.kind === "ok"
+                ? "text-phosphor"
+                : "text-muted-foreground/70"
+            }
           >
-            {copied ? (
-              <>
-                <span>✓</span>
-                <span>COPIED</span>
-              </>
-            ) : (
-              <>
-                <span>⎘</span>
-                <span>COPY COMMAND</span>
-              </>
+            {line.kind === "cmd" && (
+              <span className="shrink-0 font-bold text-signal select-none">{prompt}</span>
             )}
-          </button>
-        </div>
-      </div>
-
-      {/* Code Display Box */}
-      <div className="overflow-x-auto p-4 sm:p-5 bg-background/50">
-        <code className="block font-mono text-xs leading-relaxed whitespace-pre font-semibold text-foreground sm:text-[13.5px]">
-          <span className="mr-2.5 font-bold text-signal select-none">{prompt}</span>
-          <span className="selection:bg-signal selection:text-primary-foreground">{cmd}</span>
-        </code>
-      </div>
-
-      {/* Micro Info Footer */}
-      <div className="flex items-center justify-between border-t border-hairline/60 px-4 py-2 text-[10px] text-muted-foreground font-mono bg-card/30">
-        <span className="truncate">{note}</span>
-        <span className="text-signal/80 hidden sm:inline shrink-0 uppercase tracking-widest text-[9px]">
-          CLICK CARD TO COPY
-        </span>
+            <span
+              className={
+                line.kind === "cmd"
+                  ? "text-foreground font-semibold break-all"
+                  : undefined
+              }
+            >
+              {line.text}
+            </span>
+          </motion.div>
+        ))}
       </div>
     </div>
   );
 }
 
-function ManagerCard({
+function CopyButton({ cmd, label = "COPY" }: { cmd: string; label?: string }) {
+  const [copied, setCopied] = useState(false);
+  return (
+    <button
+      type="button"
+      onClick={() => {
+        void navigator.clipboard?.writeText(cmd);
+        setCopied(true);
+        window.setTimeout(() => setCopied(false), 1800);
+      }}
+      className="flex shrink-0 items-center gap-1.5 bg-signal px-4 py-2 font-mono text-[11px] font-bold tracking-[0.16em] text-primary-foreground uppercase transition-all hover:opacity-90 active:scale-95"
+    >
+      <AnimatePresence mode="wait" initial={false}>
+        {copied ? (
+          <motion.span key="ok" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            ✓ COPIED
+          </motion.span>
+        ) : (
+          <motion.span key="copy" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            ⎘ {label}
+          </motion.span>
+        )}
+      </AnimatePresence>
+    </button>
+  );
+}
+
+function PkgCard({
   name,
   platform,
   icon,
   cmd,
   status,
+  statusColor,
   link,
-  linkText,
-}: {
-  name: string;
-  platform: string;
-  icon: React.ReactNode;
-  cmd: string;
-  status: string;
-  link: string;
-  linkText: string;
-}) {
+}: (typeof PKG_MANAGERS)[number]) {
   const [copied, setCopied] = useState(false);
   return (
     <div
@@ -230,196 +214,307 @@ function ManagerCard({
         setCopied(true);
         window.setTimeout(() => setCopied(false), 1400);
       }}
-      className="group cursor-pointer border border-hairline bg-card/40 p-3.5 transition-all hover:border-signal hover:bg-card/75 flex flex-col justify-between"
+      className="group cursor-pointer border border-hairline bg-card/30 p-4 transition-all hover:border-signal/60 hover:bg-card/60"
     >
-      <div className="flex items-center justify-between font-mono text-[11px]">
-        <div className="flex items-center gap-2 font-bold text-foreground">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2 font-mono text-[11px] font-bold text-foreground">
           <span className="shrink-0">{icon}</span>
           <span>{name}</span>
-          <span className="text-[9.5px] text-muted-foreground/70 font-normal">({platform})</span>
+          <span className="text-[9.5px] font-normal text-muted-foreground/60">({platform})</span>
         </div>
-        <span className="border border-phosphor/50 bg-phosphor/10 px-1.5 py-0.5 font-mono text-[8.5px] font-bold text-phosphor">
+        <span className={`border px-1.5 py-0.5 font-mono text-[8.5px] font-bold ${statusColor}`}>
           {copied ? "✓ COPIED" : status}
         </span>
       </div>
-
-      <div className="mt-2.5 flex items-center justify-between gap-2 overflow-hidden bg-background/40 p-2 border border-hairline/60">
-        <code className="font-mono text-xs text-foreground/90 group-hover:text-signal truncate font-semibold">
-          <span className="text-signal mr-1.5">$</span>
+      <div className="mt-2.5 flex items-center gap-2 overflow-hidden bg-background/40 px-2.5 py-1.5 border border-hairline/40">
+        <code className="truncate font-mono text-[11px] text-foreground/80 group-hover:text-signal font-semibold">
+          <span className="text-signal mr-1.5 select-none">$</span>
           {cmd}
         </code>
-        <span className="font-mono text-[9.5px] text-muted-foreground/60 group-hover:text-signal uppercase shrink-0 font-bold">
+        <span className="ml-auto shrink-0 font-mono text-[9px] text-muted-foreground/50 group-hover:text-signal uppercase font-bold">
           {copied ? "COPIED" : "COPY"}
         </span>
       </div>
-
-      <div className="mt-2 flex items-center justify-between text-[9.5px] font-mono text-muted-foreground/70 pt-1">
-        <span>CHANNEL VERIFIED</span>
-        <a
-          href={link}
-          target="_blank"
-          rel="noreferrer"
-          onClick={(e) => e.stopPropagation()}
-          className="text-signal hover:underline flex items-center gap-1"
-        >
-          <span>{linkText}</span>
-          <span>↗</span>
-        </a>
-      </div>
+      <a
+        href={link}
+        target="_blank"
+        rel="noreferrer"
+        onClick={(e) => e.stopPropagation()}
+        className="mt-1.5 flex items-center gap-1 font-mono text-[9.5px] text-signal/70 hover:text-signal hover:underline"
+      >
+        <span>view registry ↗</span>
+      </a>
     </div>
   );
 }
 
+/* ─────────────────────────────────────────────
+   MAIN SECTION
+───────────────────────────────────────────── */
 export function Install() {
-  return (
-    <section id="install" className="relative border-b border-hairline bg-background">
-      <div className="mx-auto max-w-[1600px] px-5 py-20 sm:px-8 sm:py-28">
-        <SectionHead index="07" title="ARM YOUR SHELL" note="≈ 8 seconds setup" />
+  const [activeTab, setActiveTab] = useState<"unix" | "win">("unix");
 
-        <div className="pt-12">
-          <h3 className="display text-[clamp(2rem,5vw,3.75rem)]">
-            <MaskLine>ONE LINE.</MaskLine>
-            <MaskLine delay={0.06}>
-              <span className="text-signal">TWO WORLDS.</span>
-            </MaskLine>
-          </h3>
-          <Reveal delay={0.12}>
-            <p className="mt-4 max-w-xl font-mono text-sm leading-relaxed text-muted-foreground">
-              Your OS doesn&apos;t matter. Same philosophy, same commands, native implementations
-              where it matters. Source it once and get back to building.
+  return (
+    <section id="install" className="relative border-b border-hairline bg-background overflow-hidden">
+
+      {/* Ambient glow */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -bottom-40 left-1/2 h-[40rem] w-[60rem] -translate-x-1/2 rounded-full bg-signal/5 blur-[140px]"
+      />
+
+      <div className="relative mx-auto max-w-[1600px] px-5 py-20 sm:px-8 sm:py-28">
+        <SectionHead index="07" title="ARM YOUR SHELL" note="≈ 5 seconds" />
+
+        {/* ── HERO HEADLINE ── */}
+        <div className="mt-12 grid gap-10 lg:grid-cols-12 lg:gap-16 items-start">
+          <div className="lg:col-span-5">
+            <div className="mb-3 inline-flex items-center gap-2 border border-signal/30 bg-signal/8 px-2.5 py-1 font-mono text-[10px] tracking-[0.22em] text-signal uppercase">
+              <span className="live-dot h-1.5 w-1.5 rounded-full bg-signal" />
+              ZERO-DEP · SELF-CONTAINED
+            </div>
+            <h3 className="display text-[clamp(2.4rem,6vw,4.5rem)] leading-[0.95]">
+              <span className="block">ONE CURL.</span>
+              <span className="block text-signal">ANY SHELL.</span>
+              <span className="block text-muted-foreground/70 text-[0.75em]">ARMED IN 5s.</span>
+            </h3>
+            <p className="mt-6 font-mono text-sm leading-relaxed text-muted-foreground max-w-sm">
+              The installer detects whether you're on Zsh or Bash automatically &mdash; no flags, no questions.
+              One command covers macOS, Linux, WSL, and CI. Windows gets its own native PowerShell installer.
             </p>
-          </Reveal>
+
+            {/* Smart detection flow */}
+            <Reveal delay={0.1}>
+              <div className="mt-8 border border-hairline bg-card/30 p-4">
+                <div className="mb-3 font-mono text-[9.5px] tracking-[0.22em] text-signal uppercase">
+                  HOW INSTALL.SH DETECTS YOUR SHELL
+                </div>
+                <div className="flex flex-wrap items-center gap-1.5">
+                  {DETECTION_STEPS.map((step, i) => (
+                    <div key={step.label} className="flex items-center gap-1.5">
+                      <div className="group flex flex-col items-center">
+                        <div className="border border-hairline bg-background/60 px-2.5 py-1.5 font-mono text-[10px] font-semibold text-foreground group-hover:border-signal/50 group-hover:text-signal transition-colors">
+                          {step.label}
+                        </div>
+                        <div className="mt-0.5 font-mono text-[8.5px] text-muted-foreground/60">
+                          {step.note}
+                        </div>
+                      </div>
+                      {i < DETECTION_STEPS.length - 1 && (
+                        <span className="text-signal/40 text-xs font-mono mb-4">→</span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </Reveal>
+          </div>
+
+          {/* ── PLATFORM CARDS ── */}
+          <div className="lg:col-span-7 space-y-3">
+            {/* Tab selector */}
+            <div className="grid grid-cols-2 border border-hairline bg-card/20 p-1 font-mono text-[11px]">
+              <button
+                type="button"
+                onClick={() => setActiveTab("unix")}
+                className={`flex items-center justify-center gap-2 py-2.5 px-4 text-center tracking-wider uppercase transition-all ${
+                  activeTab === "unix"
+                    ? "bg-signal text-primary-foreground font-bold shadow-sm"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <SiApple className="text-xs" />
+                <SiLinux className="text-xs" />
+                <SiGnubash className="text-xs" />
+                <span>macOS · Linux · WSL</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveTab("win")}
+                className={`flex items-center justify-center gap-2 py-2.5 px-4 text-center tracking-wider uppercase transition-all ${
+                  activeTab === "win"
+                    ? "bg-signal text-primary-foreground font-bold shadow-sm"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <FaWindows className="text-xs" />
+                <VscTerminalPowershell className="text-xs" />
+                <span>Windows · PowerShell</span>
+              </button>
+            </div>
+
+            <AnimatePresence mode="wait">
+              {activeTab === "unix" ? (
+                <motion.div
+                  key="unix"
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.2 }}
+                  className="space-y-3"
+                >
+                  {/* Big command display */}
+                  <div className="border-2 border-signal/50 bg-card/60 hover:border-signal transition-colors duration-300 hover:shadow-[0_0_40px_color-mix(in_oklab,var(--color-signal)_12%,transparent)]">
+                    <div className="flex items-center justify-between border-b border-hairline/60 bg-card/60 px-4 py-2.5">
+                      <div className="flex items-center gap-2.5 font-mono text-[10px]">
+                        <span className="live-dot h-1.5 w-1.5 rounded-full bg-signal" />
+                        <span className="text-signal font-bold tracking-widest uppercase">Unix / POSIX</span>
+                        <span className="border border-signal/30 bg-signal/10 px-2 py-0.5 text-signal font-semibold">AUTO-DETECTS ZSH · BASH</span>
+                      </div>
+                      <span className="font-mono text-[9.5px] text-phosphor tracking-wider">ZERO-DEP</span>
+                    </div>
+                    <div className="overflow-x-auto p-5 bg-background/40">
+                      <code className="block font-mono text-sm leading-relaxed text-foreground font-semibold whitespace-pre sm:text-[13.5px]">
+                        <span className="text-signal mr-2 font-bold select-none">$</span>
+                        <span className="selection:bg-signal selection:text-primary-foreground">{UNIX_CMD}</span>
+                      </code>
+                    </div>
+                    <div className="flex flex-wrap items-center justify-between gap-2 border-t border-hairline/60 bg-card/30 px-4 py-2.5">
+                      <span className="font-mono text-[10px] text-muted-foreground">
+                        Writes <code className="text-signal">~/.sharmory/functions.zsh</code> or <code className="text-signal">functions.bash</code> based on your active shell
+                      </span>
+                      <CopyButton cmd={UNIX_CMD} />
+                    </div>
+                  </div>
+
+                  {/* Terminal simulation */}
+                  <MiniTerminal
+                    lines={UNIX_TERMINAL_LINES}
+                    prompt="$"
+                    title="zsh — install output"
+                  />
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="win"
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.2 }}
+                  className="space-y-3"
+                >
+                  {/* Big command display */}
+                  <div className="border-2 border-signal/50 bg-card/60 hover:border-signal transition-colors duration-300 hover:shadow-[0_0_40px_color-mix(in_oklab,var(--color-signal)_12%,transparent)]">
+                    <div className="flex items-center justify-between border-b border-hairline/60 bg-card/60 px-4 py-2.5">
+                      <div className="flex items-center gap-2.5 font-mono text-[10px]">
+                        <span className="text-signal font-bold text-sm">⊞</span>
+                        <span className="text-signal font-bold tracking-widest uppercase">Windows</span>
+                        <span className="border border-signal/30 bg-signal/10 px-2 py-0.5 text-signal font-semibold">POWERSHELL 5.1+ / 7+</span>
+                      </div>
+                      <span className="font-mono text-[9.5px] text-phosphor tracking-wider">NATIVE</span>
+                    </div>
+                    <div className="overflow-x-auto p-5 bg-background/40">
+                      <code className="block font-mono text-sm leading-relaxed text-foreground font-semibold whitespace-pre sm:text-[13.5px]">
+                        <span className="text-signal mr-2 font-bold select-none">PS&gt;</span>
+                        <span className="selection:bg-signal selection:text-primary-foreground">{WIN_CMD}</span>
+                      </code>
+                    </div>
+                    <div className="flex flex-wrap items-center justify-between gap-2 border-t border-hairline/60 bg-card/30 px-4 py-2.5">
+                      <span className="font-mono text-[10px] text-muted-foreground">
+                        Writes <code className="text-signal">~/.sharmory/functions.ps1</code> and wires your <code className="text-signal">$PROFILE</code>. No WSL required.
+                      </span>
+                      <CopyButton cmd={WIN_CMD} />
+                    </div>
+                  </div>
+
+                  {/* Terminal simulation */}
+                  <MiniTerminal
+                    lines={WIN_TERMINAL_LINES}
+                    prompt="PS>"
+                    title="pwsh — install output"
+                  />
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Utility links */}
+            <Reveal>
+              <div className="flex flex-wrap items-center gap-x-5 gap-y-1.5 pt-1 font-mono text-[10.5px] tracking-[0.16em] text-muted-foreground uppercase">
+                <span className="flex items-center gap-1.5">
+                  <span className="text-signal">→</span> update: <code className="text-foreground">sharmory-update</code>
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <span className="text-signal">→</span> uninstall: <code className="text-foreground">uninstall.sh / .ps1</code>
+                </span>
+                <a
+                  href={REPO}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center gap-1 text-signal hover:underline"
+                >
+                  manual setup ↗
+                </a>
+              </div>
+            </Reveal>
+          </div>
         </div>
 
-        <div className="grid gap-12 pt-10 lg:grid-cols-12 lg:gap-16">
-          {/* Left: Install Command Snippets + Package Managers */}
-          <div className="min-w-0 lg:col-span-7">
-            <div className="space-y-4">
-              <div className="flex items-center justify-between pb-1 font-mono text-[10px] sm:text-[11px] tracking-[0.2em] text-signal uppercase">
-                <span className="flex items-center gap-2">
-                  <span className="live-dot h-1.5 w-1.5 rounded-full bg-signal" />
-                  PRIMARY INSTALLATION (FASTEST · ZERO-DEP)
+        {/* ── 4-STEP LIFECYCLE ── */}
+        <Reveal delay={0.1}>
+          <div className="mt-16 grid border-t border-hairline sm:grid-cols-2 lg:grid-cols-4">
+            {LIFECYCLE.map((s, i) => (
+              <div
+                key={s.n}
+                className={`group flex gap-4 py-7 px-5 transition-colors hover:bg-card/40 ${
+                  i > 0 ? "border-t border-hairline sm:border-t-0 sm:border-l" : ""
+                } ${i === 2 ? "lg:border-l" : ""}`}
+              >
+                <span className="display text-3xl text-hairline transition-colors group-hover:text-signal leading-none pt-0.5">
+                  {s.n}
                 </span>
-                <span className="hidden sm:inline text-muted-foreground/70">≈ 1 SEC SETUP</span>
-              </div>
-
-              {SNIPPETS.map((s) => (
-                <Reveal key={s.id}>
-                  <CopyRow
-                    sigil={s.sigil}
-                    badge={s.badge}
-                    os={s.os}
-                    shell={s.shell}
-                    prompt={s.prompt}
-                    cmd={s.cmd}
-                    note={s.note}
-                  />
-                </Reveal>
-              ))}
-
-              {/* Maintenance Utility Links */}
-              <Reveal delay={0.1}>
-                <div className="flex flex-wrap items-center gap-x-6 gap-y-2 pt-1 font-mono text-[11px] tracking-[0.18em] text-muted-foreground uppercase">
-                  <span>UPDATE → sharmory-update</span>
-                  <span>UNINSTALL → uninstall.sh / .ps1</span>
-                  <a
-                    href={REPO}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="link-underline text-signal"
-                  >
-                    MANUAL SETUP ↗
-                  </a>
-                </div>
-              </Reveal>
-
-              {/* Live Package Managers & Ecosystem */}
-              <Reveal delay={0.18}>
-                <div className="mt-8 border border-hairline bg-card/30 p-5 font-mono">
-                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-hairline pb-3">
-                    <div className="flex items-center gap-2">
-                      <span className="label text-signal">PACKAGE MANAGERS</span>
-                      <span className="text-[10px] text-muted-foreground">
-                        / NATIVE DISTRIBUTION
-                      </span>
-                    </div>
-                    <span className="border border-phosphor/40 bg-phosphor/10 px-2 py-0.5 text-[9px] tracking-widest text-phosphor uppercase font-semibold">
-                      4 CHANNELS LIVE
-                    </span>
+                <div>
+                  <div className="font-mono text-[10.5px] font-bold tracking-[0.22em] text-foreground uppercase">
+                    {s.title}
                   </div>
-
-                  <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
-                    Install globally via your favorite package manager or language runtime. Click any command to copy:
+                  <p className="mt-2 font-mono text-xs leading-relaxed text-muted-foreground">
+                    {s.body}
                   </p>
-
-                  <div className="mt-4 grid gap-2.5 sm:grid-cols-2">
-                    {ACTIVE_MANAGERS.map((m) => (
-                      <ManagerCard
-                        key={m.name}
-                        name={m.name}
-                        platform={m.platform}
-                        icon={m.icon}
-                        cmd={m.cmd}
-                        status={m.status}
-                        link={m.link}
-                        linkText={m.linkText}
-                      />
-                    ))}
-                  </div>
-
-                  <div className="mt-4 pt-3 border-t border-hairline/60 flex flex-wrap items-center justify-between gap-2 text-[10.5px] text-muted-foreground">
-                    <span className="text-[10px] tracking-wider uppercase">COMING SOON:</span>
-                    <div className="flex items-center gap-4">
-                      {PLANNED_MANAGERS.map((p) => (
-                        <span key={p.name} className="flex items-center gap-1.5 font-mono text-[10px]">
-                          <span className="text-muted-foreground/60">{p.name}</span>
-                          <span className="border border-hairline px-1 py-0.2 text-[8.5px] text-muted-foreground/80">
-                            {p.status}
-                          </span>
-                        </span>
-                      ))}
-                    </div>
-                  </div>
                 </div>
-              </Reveal>
+              </div>
+            ))}
+          </div>
+        </Reveal>
+
+        {/* ── PACKAGE MANAGERS ── */}
+        <Reveal delay={0.15}>
+          <div className="mt-10 border border-hairline bg-card/20 p-6">
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-hairline pb-4">
+              <div className="flex items-center gap-3">
+                <span className="font-mono text-[11px] font-bold tracking-[0.2em] text-signal uppercase">
+                  Package Managers
+                </span>
+                <span className="font-mono text-[10px] text-muted-foreground">/ native distribution</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="border border-phosphor/40 bg-phosphor/10 px-2 py-0.5 font-mono text-[9px] font-bold tracking-widest text-phosphor">
+                  4 LIVE
+                </span>
+                <span className="border border-hairline px-2 py-0.5 font-mono text-[9px] text-muted-foreground">
+                  1 SOON
+                </span>
+              </div>
+            </div>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+              {PKG_MANAGERS.map((m) => (
+                <PkgCard key={m.id} {...m} />
+              ))}
             </div>
           </div>
+        </Reveal>
 
-          {/* Right: 4-Step Lifecycle */}
-          <div className="lg:col-span-5">
-            <ol className="border-t border-hairline">
-              {STEPS.map((s, i) => (
-                <Reveal key={s.n} delay={i * 0.05}>
-                  <li className="group flex gap-5 border-b border-hairline py-5">
-                    <span className="display text-2xl text-hairline transition-colors group-hover:text-signal">
-                      {s.n}
-                    </span>
-                    <div>
-                      <h4 className="font-mono text-xs font-semibold tracking-[0.22em] text-foreground">
-                        {s.title}
-                      </h4>
-                      <p className="mt-2 font-mono text-xs leading-relaxed text-muted-foreground">
-                        {s.body}
-                      </p>
-                    </div>
-                  </li>
-                </Reveal>
-              ))}
-            </ol>
-          </div>
-        </div>
-
-        {/* proof metrics strip */}
-        <div className="mt-20 grid border-y border-hairline sm:grid-cols-2 lg:grid-cols-4">
+        {/* ── METRICS BAR ── */}
+        <div className="mt-12 grid border-y border-hairline sm:grid-cols-2 lg:grid-cols-4">
           {[
             { v: SHIPPED, s: "", k: "FUNCTIONS SHIPPED" },
             { v: 100, s: "%", k: "SANDBOXED TEST COVERAGE" },
-            { v: 2, s: "", k: "SHELLS, ONE API" },
+            { v: 3, s: "", k: "SHELLS, ONE API" },
             { v: 0, s: "", k: "RUNTIME DEPENDENCIES" },
           ].map((m, i) => (
             <div
               key={m.k}
-              className={`px-4 py-10 ${i > 0 ? "border-t border-hairline sm:border-t-0 sm:border-l" : ""} ${i === 2 ? "lg:border-l" : ""}`}
+              className={`px-5 py-10 ${i > 0 ? "border-t border-hairline sm:border-t-0 sm:border-l" : ""} ${
+                i === 2 ? "lg:border-l" : ""
+              }`}
             >
               <div className="display text-[clamp(2.5rem,6vw,4.5rem)] text-signal">
                 <Counter to={m.v} suffix={m.s} />

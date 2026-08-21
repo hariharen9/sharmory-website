@@ -3,13 +3,13 @@ import { REPO } from "@/lib/armoury";
 import { useSharmoryVersion } from "@/lib/useVersion";
 import { MagneticLink } from "./primitives";
 import { ThemeToggle } from "./ThemeToggle";
+import { SiGithub } from "react-icons/si";
 
 const LINKS = [
   { href: "#why", label: "WHY" },
   { href: "#origin", label: "ORIGIN" },
   { href: "#parity", label: "PARITY" },
   { href: "#arsenal", label: "ARSENAL" },
-  { href: "#featured", label: "FEATURED" },
   { href: "#landscape", label: "LANDSCAPE" },
   { href: "#install", label: "INSTALL" },
 ];
@@ -62,9 +62,10 @@ export function Nav() {
             href={REPO}
             target="_blank"
             rel="noreferrer"
-            className="border border-signal px-4 py-1.5 font-mono text-[11px] tracking-[0.22em] text-signal transition-colors hover:bg-signal hover:text-primary-foreground"
+            className="flex items-center gap-2 border border-signal px-3.5 py-1.5 font-mono text-[11px] tracking-[0.22em] text-signal transition-colors hover:bg-signal hover:text-primary-foreground"
           >
-            GITHUB ↗
+            <SiGithub className="text-xs" />
+            <span>GITHUB ↗</span>
           </MagneticLink>
         </div>
 
@@ -88,14 +89,15 @@ export function Nav() {
             <span className="text-muted-foreground">COLOR SCHEME</span>
             <ThemeToggle />
           </div>
-          {[...LINKS, { href: REPO, label: "GITHUB ↗" }].map((l) => (
+          {[...LINKS, { href: REPO, label: "GITHUB ↗", isGithub: true }].map((l) => (
             <a
               key={l.label}
               href={l.href}
               onClick={() => setOpen(false)}
-              className="block border-b border-hairline px-5 py-4 font-mono text-xs tracking-[0.22em]"
+              className="flex items-center gap-2.5 border-b border-hairline px-5 py-4 font-mono text-xs tracking-[0.22em]"
             >
-              {l.label}
+              {"isGithub" in l && <SiGithub className="text-signal text-sm" />}
+              <span>{l.label}</span>
             </a>
           ))}
         </div>

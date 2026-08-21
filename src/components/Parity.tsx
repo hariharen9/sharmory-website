@@ -1,12 +1,21 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { Reveal, SectionHead, MaskLine } from "./primitives";
+import { SiApple, SiLinux, SiGnubash } from "react-icons/si";
+import { FaWindows } from "react-icons/fa6";
+import { VscTerminalPowershell } from "react-icons/vsc";
+import { FiLayers, FiCheckCircle, FiZap } from "react-icons/fi";
 
 interface ParityScenario {
   id: string;
   label: string;
   tag: string;
   zsh: {
+    prompt: string;
+    cmd: string;
+    output: { text: string; kind: "cmd" | "out" | "ok" | "warn" }[];
+  };
+  bash: {
     prompt: string;
     cmd: string;
     output: { text: string; kind: "cmd" | "out" | "ok" | "warn" }[];
@@ -32,6 +41,15 @@ const SCENARIOS: ParityScenario[] = [
         { text: "✅ Port 3000 is now free.", kind: "ok" },
       ],
     },
+    bash: {
+      prompt: "~/workspace/api (main)",
+      cmd: "killport 3000",
+      output: [
+        { text: "🔄 Found process (PID: 41289) using port 3000.", kind: "out" },
+        { text: "⏳ Sending SIGTERM...", kind: "out" },
+        { text: "✅ Port 3000 is now free.", kind: "ok" },
+      ],
+    },
     pwsh: {
       prompt: "C:\\Workspace\\api [main]",
       cmd: "killport 3000",
@@ -48,19 +66,28 @@ const SCENARIOS: ParityScenario[] = [
     tag: "GIT",
     zsh: {
       prompt: "~/workspace/sharmory (feat/parity)",
-      cmd: "gacp 'feat: add windows terminal tests'",
+      cmd: "gacp 'feat: add bash parity'",
       output: [
         { text: "staged: 4 modified files, 1 untracked", kind: "out" },
-        { text: "[feat/parity c82d910] feat: add windows terminal tests", kind: "ok" },
+        { text: "[feat/parity c82d910] feat: add bash parity", kind: "ok" },
+        { text: "✓ pushed → origin/feat/parity (0 conflicts)", kind: "ok" },
+      ],
+    },
+    bash: {
+      prompt: "~/workspace/sharmory (feat/parity)",
+      cmd: "gacp 'feat: add bash parity'",
+      output: [
+        { text: "staged: 4 modified files, 1 untracked", kind: "out" },
+        { text: "[feat/parity c82d910] feat: add bash parity", kind: "ok" },
         { text: "✓ pushed → origin/feat/parity (0 conflicts)", kind: "ok" },
       ],
     },
     pwsh: {
       prompt: "C:\\Workspace\\sharmory [feat/parity]",
-      cmd: "gacp 'feat: add windows terminal tests'",
+      cmd: "gacp 'feat: add bash parity'",
       output: [
         { text: "staged: 4 modified files, 1 untracked", kind: "out" },
-        { text: "[feat/parity c82d910] feat: add windows terminal tests", kind: "ok" },
+        { text: "[feat/parity c82d910] feat: add bash parity", kind: "ok" },
         { text: "✓ pushed → origin/feat/parity (0 conflicts)", kind: "ok" },
       ],
     },
@@ -70,6 +97,15 @@ const SCENARIOS: ParityScenario[] = [
     label: "TLS AUDIT",
     tag: "SECURITY",
     zsh: {
+      prompt: "~/workspace/infra",
+      cmd: "certcheck sharmory.dev",
+      output: [
+        { text: "Expires: Nov 02 14:22:10 2026 GMT", kind: "out" },
+        { text: "Issuer: Let's Encrypt Authority X3", kind: "out" },
+        { text: "✓ Days remaining: 76 days (HEALTHY)", kind: "ok" },
+      ],
+    },
+    bash: {
       prompt: "~/workspace/infra",
       cmd: "certcheck sharmory.dev",
       output: [
@@ -102,6 +138,16 @@ const SCENARIOS: ParityScenario[] = [
         { text: "✓ Deleted 8 stale local branches", kind: "ok" },
       ],
     },
+    bash: {
+      prompt: "~/workspace/repo (main)",
+      cmd: "branchclean",
+      output: [
+        { text: "Evaluating merged branches against origin/main...", kind: "out" },
+        { text: "  - fix/auth-token (merged)", kind: "warn" },
+        { text: "  - chore/deps-upgrade (merged)", kind: "warn" },
+        { text: "✓ Deleted 8 stale local branches", kind: "ok" },
+      ],
+    },
     pwsh: {
       prompt: "C:\\Workspace\\repo [main]",
       cmd: "branchclean",
@@ -118,6 +164,15 @@ const SCENARIOS: ParityScenario[] = [
     label: "DOCKER TRIAGE",
     tag: "CONTAINERS",
     zsh: {
+      prompt: "~/workspace/services",
+      cmd: "dockernuke api-gateway",
+      output: [
+        { text: "Stopping container 'api-gateway'...", kind: "out" },
+        { text: "Removing container + orphan mounts...", kind: "out" },
+        { text: "✓ Removed container api-gateway (PID freed)", kind: "ok" },
+      ],
+    },
+    bash: {
       prompt: "~/workspace/services",
       cmd: "dockernuke api-gateway",
       output: [
@@ -162,7 +217,7 @@ export function Parity() {
       <div className="mx-auto max-w-[1600px] px-4 py-20 sm:px-8 sm:py-28">
         <SectionHead
           index="03"
-          title="DUAL-SHELL PARITY"
+          title="TRIPLE-SHELL PARITY"
           note="windows 11 + macos + linux"
         />
 
@@ -192,9 +247,10 @@ export function Parity() {
               isolated WSL container.
             </p>
             <p className="mt-3">
-              Sharmory delivers <strong className="text-foreground font-semibold">100% muscle-memory parity</strong>.
-              The exact same commands, flags, and ergonomics work natively whether you&apos;re on a
-              MacBook Pro, Windows 11 workstation, or Linux cloud server.
+              Sharmory delivers <strong className="text-foreground font-semibold">100% muscle-memory parity</strong> across{" "}
+              <strong className="text-signal">all three shells</strong>. The exact same commands, flags,
+              and ergonomics work natively on macOS/Linux (Zsh), Linux/CI servers (Bash), and Windows
+              11 workstations (PowerShell) — no rewrites, no context switching.
             </p>
           </div>
         </div>
@@ -235,66 +291,44 @@ export function Parity() {
           </button>
         </div>
 
-        {/* Side-by-Side Dual-Terminal Showdown */}
-        <div className="mt-8 grid gap-6 lg:grid-cols-2">
-          {/* macOS / Linux Terminal Frame */}
+        {/* Three-Terminal Showdown: ZSH · BASH · PWSH */}
+        <div className="mt-8 grid gap-6 lg:grid-cols-3">
+          {/* macOS / Linux Zsh Frame */}
           <div className="flex flex-col border border-hairline bg-card/80 shadow-2xl backdrop-blur-sm overflow-hidden">
-            {/* macOS Window Chrome */}
             <div className="flex items-center justify-between border-b border-hairline bg-card px-4 py-2.5 font-mono text-[11px]">
               <div className="flex items-center gap-2">
                 <span className="h-3 w-3 rounded-full bg-[#FF5F56]/80 border border-[#E0443E]" />
                 <span className="h-3 w-3 rounded-full bg-[#FFBD2E]/80 border border-[#DEA123]" />
                 <span className="h-3 w-3 rounded-full bg-[#27C93F]/80 border border-[#1AAB29]" />
                 <span className="ml-2 font-semibold text-foreground/90 flex items-center gap-1.5">
-                  <span className="text-signal"></span> macOS / Linux · zsh
+                  <SiApple className="text-signal text-xs" />
+                  <span>macOS / Linux · zsh</span>
                 </span>
               </div>
               <span className="text-[10px] text-muted-foreground/70">~/.sharmory/functions.zsh</span>
             </div>
-
-            {/* macOS Terminal Body */}
-            <div className="p-4 sm:p-6 font-mono text-xs sm:text-[13px] leading-relaxed flex-1 flex flex-col justify-between min-h-[220px]">
+            <div className="p-4 sm:p-5 font-mono text-xs sm:text-[13px] leading-relaxed flex-1 flex flex-col justify-between min-h-[210px]">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={current.id}
-                  {...(reduced
-                    ? {}
-                    : {
-                        initial: { opacity: 0, y: 6 },
-                        animate: { opacity: 1, y: 0 },
-                        exit: { opacity: 0, y: -6 },
-                        transition: { duration: 0.2 },
-                      })}
+                  {...(reduced ? {} : { initial: { opacity: 0, y: 6 }, animate: { opacity: 1, y: 0 }, exit: { opacity: 0, y: -6 }, transition: { duration: 0.2 } })}
                   className="space-y-2.5"
                 >
-                  <div className="text-muted-foreground/80 text-[11px]">
-                    {current.zsh.prompt}
-                  </div>
+                  <div className="text-muted-foreground/80 text-[11px]">{current.zsh.prompt}</div>
                   <div className="flex items-center gap-2 font-bold text-foreground">
                     <span className="text-signal font-bold">$</span>
                     <span className="text-foreground">{current.zsh.cmd}</span>
                     <span className="caret ml-1 inline-block" />
                   </div>
-
                   <div className="mt-3 space-y-1.5 pt-2 border-t border-hairline/40">
                     {current.zsh.output.map((line, idx) => (
-                      <div
-                        key={idx}
-                        className={`${
-                          line.kind === "ok"
-                            ? "text-phosphor font-medium"
-                            : line.kind === "warn"
-                            ? "text-signal"
-                            : "text-muted-foreground"
-                        }`}
-                      >
+                      <div key={idx} className={line.kind === "ok" ? "text-phosphor font-medium" : line.kind === "warn" ? "text-signal" : "text-muted-foreground"}>
                         {line.text}
                       </div>
                     ))}
                   </div>
                 </motion.div>
               </AnimatePresence>
-
               <div className="mt-4 flex items-center justify-between border-t border-hairline/60 pt-3 text-[10px] text-muted-foreground uppercase">
                 <span className="flex items-center gap-1.5">
                   <span className="h-1.5 w-1.5 rounded-full bg-phosphor" />
@@ -305,12 +339,57 @@ export function Parity() {
             </div>
           </div>
 
+          {/* Linux / CI Bash Frame */}
+          <div className="flex flex-col border border-signal/30 bg-card/80 shadow-2xl backdrop-blur-sm overflow-hidden">
+            <div className="flex items-center justify-between border-b border-signal/30 bg-signal/5 px-4 py-2.5 font-mono text-[11px]">
+              <div className="flex items-center gap-2">
+                <span className="h-3 w-3 rounded-full bg-[#FF5F56]/80 border border-[#E0443E]" />
+                <span className="h-3 w-3 rounded-full bg-[#FFBD2E]/80 border border-[#DEA123]" />
+                <span className="h-3 w-3 rounded-full bg-[#27C93F]/80 border border-[#1AAB29]" />
+                <span className="ml-2 font-semibold text-signal flex items-center gap-1.5">
+                  <SiGnubash className="text-xs" />
+                  <span>Linux / CI · bash 4.0+</span>
+                </span>
+              </div>
+              <span className="text-[10px] text-signal/60">~/.sharmory/functions.bash</span>
+            </div>
+            <div className="p-4 sm:p-5 font-mono text-xs sm:text-[13px] leading-relaxed flex-1 flex flex-col justify-between min-h-[210px]">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={current.id}
+                  {...(reduced ? {} : { initial: { opacity: 0, y: 6 }, animate: { opacity: 1, y: 0 }, exit: { opacity: 0, y: -6 }, transition: { duration: 0.2 } })}
+                  className="space-y-2.5"
+                >
+                  <div className="text-muted-foreground/80 text-[11px]">{current.bash.prompt}</div>
+                  <div className="flex items-center gap-2 font-bold text-foreground">
+                    <span className="text-signal font-bold">$</span>
+                    <span className="text-foreground">{current.bash.cmd}</span>
+                    <span className="caret ml-1 inline-block" />
+                  </div>
+                  <div className="mt-3 space-y-1.5 pt-2 border-t border-hairline/40">
+                    {current.bash.output.map((line, idx) => (
+                      <div key={idx} className={line.kind === "ok" ? "text-phosphor font-medium" : line.kind === "warn" ? "text-signal" : "text-muted-foreground"}>
+                        {line.text}
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+              <div className="mt-4 flex items-center justify-between border-t border-signal/30 pt-3 text-[10px] text-signal/80 uppercase">
+                <span className="flex items-center gap-1.5">
+                  <span className="h-1.5 w-1.5 rounded-full bg-signal live-dot" />
+                  BASH 4.0+ / POSIX NATIVE
+                </span>
+                <span>EXECUTION: &lt;2ms</span>
+              </div>
+            </div>
+          </div>
+
           {/* Windows 11 PowerShell Frame */}
           <div className="flex flex-col border border-hairline bg-card/80 shadow-2xl backdrop-blur-sm overflow-hidden">
-            {/* Windows 11 Window Chrome */}
             <div className="flex items-center justify-between border-b border-hairline bg-card px-4 py-2.5 font-mono text-[11px]">
               <div className="flex items-center gap-2">
-                <span className="text-signal font-bold text-xs">⊞</span>
+                <FaWindows className="text-signal text-xs" />
                 <span className="font-semibold text-foreground/90 flex items-center gap-1.5">
                   Windows 11 · PowerShell 7.4+ / 5.1
                 </span>
@@ -321,54 +400,32 @@ export function Parity() {
                 <span>✕</span>
               </div>
             </div>
-
-            {/* Windows 11 Terminal Body */}
-            <div className="p-4 sm:p-6 font-mono text-xs sm:text-[13px] leading-relaxed flex-1 flex flex-col justify-between min-h-[220px]">
+            <div className="p-4 sm:p-5 font-mono text-xs sm:text-[13px] leading-relaxed flex-1 flex flex-col justify-between min-h-[210px]">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={current.id}
-                  {...(reduced
-                    ? {}
-                    : {
-                        initial: { opacity: 0, y: 6 },
-                        animate: { opacity: 1, y: 0 },
-                        exit: { opacity: 0, y: -6 },
-                        transition: { duration: 0.2 },
-                      })}
+                  {...(reduced ? {} : { initial: { opacity: 0, y: 6 }, animate: { opacity: 1, y: 0 }, exit: { opacity: 0, y: -6 }, transition: { duration: 0.2 } })}
                   className="space-y-2.5"
                 >
-                  <div className="text-muted-foreground/80 text-[11px]">
-                    {current.pwsh.prompt}
-                  </div>
+                  <div className="text-muted-foreground/80 text-[11px]">{current.pwsh.prompt}</div>
                   <div className="flex items-center gap-2 font-bold text-foreground">
                     <span className="text-signal font-bold">PS&gt;</span>
                     <span className="text-foreground">{current.pwsh.cmd}</span>
                     <span className="caret ml-1 inline-block" />
                   </div>
-
                   <div className="mt-3 space-y-1.5 pt-2 border-t border-hairline/40">
                     {current.pwsh.output.map((line, idx) => (
-                      <div
-                        key={idx}
-                        className={`${
-                          line.kind === "ok"
-                            ? "text-phosphor font-medium"
-                            : line.kind === "warn"
-                            ? "text-signal"
-                            : "text-muted-foreground"
-                        }`}
-                      >
+                      <div key={idx} className={line.kind === "ok" ? "text-phosphor font-medium" : line.kind === "warn" ? "text-signal" : "text-muted-foreground"}>
                         {line.text}
                       </div>
                     ))}
                   </div>
                 </motion.div>
               </AnimatePresence>
-
               <div className="mt-4 flex items-center justify-between border-t border-hairline/60 pt-3 text-[10px] text-muted-foreground uppercase">
                 <span className="flex items-center gap-1.5">
                   <span className="h-1.5 w-1.5 rounded-full bg-phosphor" />
-                  NATIVE POWERSHELL / ZERO WSL REQUIRED
+                  NATIVE POWERSHELL / ZERO WSL
                 </span>
                 <span>EXECUTION: &lt;2ms</span>
               </div>
@@ -381,7 +438,10 @@ export function Parity() {
           <Reveal delay={0.05}>
             <div className="border border-hairline bg-card/30 p-5 h-full flex flex-col justify-between">
               <div>
-                <div className="display text-3xl sm:text-4xl text-signal">100%</div>
+                <div className="flex items-center justify-between">
+                  <div className="display text-3xl sm:text-4xl text-signal">100%</div>
+                  <FiLayers className="text-lg text-signal/70" />
+                </div>
                 <div className="font-mono text-xs font-bold uppercase mt-2 text-foreground">
                   Identical Muscle Memory
                 </div>
@@ -398,7 +458,10 @@ export function Parity() {
           <Reveal delay={0.1}>
             <div className="border border-hairline bg-card/30 p-5 h-full flex flex-col justify-between">
               <div>
-                <div className="display text-3xl sm:text-4xl text-signal">0 WSL</div>
+                <div className="flex items-center justify-between">
+                  <div className="display text-3xl sm:text-4xl text-signal">0 WSL</div>
+                  <FaWindows className="text-lg text-signal/70" />
+                </div>
                 <div className="font-mono text-xs font-bold uppercase mt-2 text-foreground">
                   Native Windows Speed
                 </div>
@@ -415,16 +478,19 @@ export function Parity() {
           <Reveal delay={0.15}>
             <div className="border border-hairline bg-card/30 p-5 h-full flex flex-col justify-between">
               <div>
-                <div className="display text-3xl sm:text-4xl text-signal">125/125</div>
+                <div className="flex items-center justify-between">
+                  <div className="display text-3xl sm:text-4xl text-signal">142/142</div>
+                  <FiCheckCircle className="text-lg text-signal/70" />
+                </div>
                 <div className="font-mono text-xs font-bold uppercase mt-2 text-foreground">
                   Full Feature Parity
                 </div>
                 <p className="mt-2 font-mono text-xs text-muted-foreground leading-relaxed">
-                  Every single function in the Zsh library has been painstakingly ported to PowerShell with matching error handling and flags.
+                  Every single function has been ported to all three shells with matching error handling, flags, and exit codes.
                 </p>
               </div>
               <div className="mt-4 font-mono text-[9.5px] text-signal uppercase tracking-wider">
-                TEST-MOCKED VALIDATION
+                CI-VALIDATED · 3 SHELLS
               </div>
             </div>
           </Reveal>
@@ -432,7 +498,10 @@ export function Parity() {
           <Reveal delay={0.2}>
             <div className="border border-hairline bg-card/30 p-5 h-full flex flex-col justify-between">
               <div>
-                <div className="display text-3xl sm:text-4xl text-signal">0ms</div>
+                <div className="flex items-center justify-between">
+                  <div className="display text-3xl sm:text-4xl text-signal">0ms</div>
+                  <FiZap className="text-lg text-signal/70" />
+                </div>
                 <div className="font-mono text-xs font-bold uppercase mt-2 text-foreground">
                   Startup Tax
                 </div>

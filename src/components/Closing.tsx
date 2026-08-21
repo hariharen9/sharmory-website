@@ -1,5 +1,6 @@
 import { CATEGORIES, REPO } from "@/lib/armoury";
 import { MagneticLink, MaskLine, Ticker, Reveal } from "./primitives";
+import { SiGithub } from "react-icons/si";
 
 const NAMES = CATEGORIES.flatMap((c) => c.tools.map((t) => t.name));
 
@@ -64,9 +65,10 @@ export function Closing() {
                 href={REPO}
                 target="_blank"
                 rel="noreferrer"
-                className="group inline-flex w-full sm:w-auto justify-center items-center gap-3 bg-signal px-7 py-3.5 font-mono text-xs tracking-[0.16em] font-semibold text-primary-foreground uppercase transition-all hover:opacity-90"
+                className="group inline-flex w-full sm:w-auto justify-center items-center gap-2.5 bg-signal px-7 py-3.5 font-mono text-xs tracking-[0.16em] font-semibold text-primary-foreground uppercase transition-all hover:opacity-90"
               >
-                VIEW ON GITHUB ↗
+                <SiGithub className="text-sm" />
+                <span>VIEW ON GITHUB ↗</span>
               </MagneticLink>
               <button
                 type="button"
@@ -118,7 +120,7 @@ export function Closing() {
               <span>SHARMORY © {new Date().getFullYear()}</span>
               <span className="hidden sm:inline text-hairline">|</span>
               <span className="hidden sm:inline text-muted-foreground/70">
-                0 DEPENDENCIES · DUAL-SHELL ARSENAL
+                0 DEPENDENCIES · TRIPLE-SHELL ARSENAL (ZSH · BASH · PWSH)
               </span>
             </div>
 
@@ -127,9 +129,10 @@ export function Closing() {
                 href={REPO}
                 target="_blank"
                 rel="noreferrer"
-                className="link-underline hover:text-signal transition-colors"
+                className="link-underline hover:text-signal transition-colors flex items-center gap-1.5"
               >
-                GITHUB ↗
+                <SiGithub className="text-xs" />
+                <span>GITHUB ↗</span>
               </a>
               <a
                 href={`${REPO}#categories`}

@@ -2,6 +2,40 @@ import { useState, useMemo, useRef, useEffect } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { CATEGORIES, SHIPPED, TOTAL_TOOLS } from "@/lib/armoury";
 import { Reveal, SectionHead } from "./primitives";
+import {
+  SiGit,
+  SiDocker,
+  SiKubernetes,
+  SiGo,
+  SiNodedotjs,
+  SiPython,
+  SiJenkins,
+} from "react-icons/si";
+import {
+  FiFolder,
+  FiGlobe,
+  FiShield,
+  FiActivity,
+  FiZap,
+  FiTerminal,
+  FiSearch,
+} from "react-icons/fi";
+
+const CATEGORY_ICONS: Record<string, React.ReactNode> = {
+  files: <FiFolder />,
+  git: <SiGit />,
+  docker: <SiDocker />,
+  k8s: <SiKubernetes />,
+  go: <SiGo />,
+  node: <SiNodedotjs />,
+  python: <SiPython />,
+  net: <FiGlobe />,
+  security: <FiShield />,
+  system: <FiActivity />,
+  prod: <FiZap />,
+  jenkins: <SiJenkins />,
+  meta: <FiTerminal />,
+};
 
 export function Arsenal() {
   const [active, setActive] = useState(CATEGORIES[0]!.id);
@@ -55,7 +89,7 @@ export function Arsenal() {
         <div className="mt-8 w-full min-w-0 border border-hairline bg-card/40 p-2.5 sm:p-3">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex flex-1 items-center gap-2.5 px-1 sm:px-2 min-w-0">
-              <span className="font-mono text-sm text-signal font-bold">/</span>
+              <FiSearch className="text-sm text-signal shrink-0" />
               <input
                 ref={searchInputRef}
                 type="text"
@@ -158,15 +192,15 @@ export function Arsenal() {
                             : "bg-card/30 lg:bg-transparent hover:bg-card/60"
                         }`}
                       >
-                        <div className="flex items-center gap-1.5 sm:gap-2 truncate min-w-0 flex-1">
+                        <div className="flex items-center gap-2 truncate min-w-0 flex-1">
                           <span
-                            className={`font-mono text-[9.5px] sm:text-[11px] shrink-0 ${
-                              on ? "text-primary-foreground font-bold" : "text-signal"
+                            className={`text-sm shrink-0 ${
+                              on ? "text-primary-foreground" : "text-signal"
                             }`}
                           >
-                            [{c.index}]
+                            {CATEGORY_ICONS[c.id] || <FiTerminal />}
                           </span>
-                          <span className="font-mono text-[10.5px] sm:text-xs lg:display lg:text-xl uppercase truncate">
+                          <span className="font-mono text-[10.5px] sm:text-xs lg:display lg:text-lg uppercase truncate">
                             {c.name}
                           </span>
                         </div>
@@ -211,7 +245,10 @@ export function Arsenal() {
                 >
                   <div className="flex flex-wrap items-baseline justify-between gap-2 border-b border-hairline px-0 py-4 sm:py-6 lg:px-8">
                     <div>
-                      <div className="label mb-1 text-signal">LOADOUT / {cat.index}</div>
+                      <div className="label mb-1 text-signal flex items-center gap-2">
+                        <span className="text-sm">{CATEGORY_ICONS[cat.id]}</span>
+                        <span>LOADOUT / {cat.index} · {cat.name}</span>
+                      </div>
                       <p className="max-w-xl font-mono text-xs sm:text-sm text-muted-foreground">
                         {cat.blurb}
                       </p>

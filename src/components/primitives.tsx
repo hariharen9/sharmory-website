@@ -195,20 +195,40 @@ export function SectionHead({
 
 /* ---------- ticker ---------- */
 
-export function Ticker({ items }: { items: string[] }) {
+export type TickerItem =
+  | string
+  | {
+      label: string;
+      icon?: ReactNode;
+      color?: string;
+    };
+
+export function Ticker({ items }: { items: (string | TickerItem)[] }) {
   const row = [...items, ...items];
   return (
     <div className="relative overflow-hidden border-y border-hairline bg-card/40 py-3">
-      <div className="marquee-track flex w-max gap-10 whitespace-nowrap">
-        {row.map((t, i) => (
-          <span
-            key={i}
-            className="flex items-center gap-10 font-mono text-xs tracking-[0.2em] text-muted-foreground uppercase"
-          >
-            {t}
-            <span className="text-signal">◆</span>
-          </span>
-        ))}
+      <div className="marquee-track flex w-max gap-8 whitespace-nowrap">
+        {row.map((item, i) => {
+          const isObj = typeof item === "object" && item !== null;
+          const label = isObj ? item.label : item;
+          const icon = isObj ? item.icon : null;
+          const color = isObj ? item.color : undefined;
+
+          return (
+            <span
+              key={i}
+              className="flex items-center gap-3 font-mono text-xs tracking-[0.2em] text-muted-foreground uppercase"
+            >
+              {icon && (
+                <span className="text-sm shrink-0" style={{ color: color || "inherit" }}>
+                  {icon}
+                </span>
+              )}
+              <span>{label}</span>
+              <span className="text-signal/50 ml-5 select-none">◆</span>
+            </span>
+          );
+        })}
       </div>
     </div>
   );

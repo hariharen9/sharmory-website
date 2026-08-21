@@ -67,15 +67,42 @@ const HITTERS = [
   },
   {
     n: "08",
-    cmd: "apihit",
-    args: "https://api.internal/health",
+    cmd: "ipinfo",
+    args: "8.8.8.8",
     tag: "NET",
-    domain: "API Diagnostics",
-    desc: "Send HTTP requests with formatted JSON output, status codes, and accurate DNS + TLS timing breakdowns.",
-    badge: "BENCHMARK",
+    domain: "IP Intelligence",
+    desc: "IP geolocation, ASN, org, and timezone via ipinfo.io. Defaults to your own public IP.",
+    badge: "RECON",
   },
   {
     n: "09",
+    cmd: "gpr",
+    args: "",
+    tag: "GIT",
+    domain: "Pull Requests",
+    desc: "Open the GitHub PR creation page for the current branch in your browser — one keystroke.",
+    badge: "WORKFLOW",
+  },
+  {
+    n: "10",
+    cmd: "hist",
+    args: "",
+    tag: "PROD",
+    domain: "Productivity",
+    desc: "Fuzzy-search your shell history with fzf and paste the selection back to the prompt instantly.",
+    badge: "EFFICIENCY",
+  },
+  {
+    n: "11",
+    cmd: "portscan",
+    args: "api.internal 80 443",
+    tag: "NET",
+    domain: "Network Recon",
+    desc: "TCP connect-scan a range of ports on a remote host without needing nmap installed.",
+    badge: "DIAGNOSTIC",
+  },
+  {
+    n: "12",
     cmd: "branchclean",
     args: "",
     tag: "GIT",
@@ -100,14 +127,14 @@ export function Featured() {
         <SectionHead
           index="05"
           title="FIELD TESTED / THE HEAVY HITTERS"
-          note="9 battle-proven daily drivers"
+          note="12 battle-proven daily drivers"
         />
 
         <div className="pt-12">
           <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
             <div>
               <h3 className="display text-[clamp(2rem,5vw,3.75rem)]">
-                <MaskLine>NINE WEAPONS.</MaskLine>
+                <MaskLine>TWELVE WEAPONS.</MaskLine>
                 <MaskLine delay={0.06}>
                   <span className="text-signal">INSTANT LEVERAGE.</span>
                 </MaskLine>

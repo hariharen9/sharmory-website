@@ -1,8 +1,10 @@
 import { Reveal, SectionHead, MaskLine } from "./primitives";
+import { FiList, FiPackage, FiTool, FiMonitor, FiZap } from "react-icons/fi";
 
 const CATEGORIES = [
   {
     type: "CATALOGUES",
+    icon: <FiList />,
     examples: "Awesome Shell, Awesome Modern CLI",
     role: "Index hundreds of separate tools",
     flaw: "Endless evaluation, manual assembly, dependency fatigue",
@@ -11,6 +13,7 @@ const CATEGORIES = [
   },
   {
     type: "ECOSYSTEMS",
+    icon: <FiPackage />,
     examples: "Oh My Zsh, Bash-it, Starship",
     role: "Customize prompt, theme, plugins",
     flaw: "Startup latency tax, plugin manager overhead, config rot",
@@ -19,6 +22,7 @@ const CATEGORIES = [
   },
   {
     type: "FOCUSED UTILITIES",
+    icon: <FiTool />,
     examples: "fzf, ripgrep, bat, eza, zoxide, fd",
     role: "Replace single Unix primitives",
     flaw: "Doesn't solve multi-command developer workflows",
@@ -27,6 +31,7 @@ const CATEGORIES = [
   },
   {
     type: "TUI WRAPPERS",
+    icon: <FiMonitor />,
     examples: "lazygit, lazydocker",
     role: "Full-screen interactive dashboards",
     flaw: "Leaves the interactive shell prompt, cannot be piped or scripted",
@@ -35,9 +40,10 @@ const CATEGORIES = [
   },
   {
     type: "SHARMORY",
+    icon: <FiZap />,
     examples: "Your Developer's Armoury",
     role: "Collapses everyday 2–5 command sequences into fast verbs",
-    flaw: "None. 1 file, 0 dependencies, 2 shells (Zsh + PowerShell)",
+    flaw: "None. 3 files, 0 dependencies, 3 shells (Zsh + Bash + PowerShell)",
     verdict: "Your instant personal loadout",
     highlight: true,
   },
@@ -79,11 +85,12 @@ export function Landscape() {
                   <div>
                     <div className="flex items-center justify-between">
                       <span
-                        className={`font-mono text-[11px] font-bold tracking-[0.2em] uppercase ${
+                        className={`flex items-center gap-1.5 font-mono text-[11px] font-bold tracking-[0.2em] uppercase ${
                           c.highlight ? "text-signal" : "text-muted-foreground"
                         }`}
                       >
-                        [{String(i + 1).padStart(2, "0")}] {c.type}
+                        <span className="text-xs">{c.icon}</span>
+                        <span>[{String(i + 1).padStart(2, "0")}] {c.type}</span>
                       </span>
                       {c.highlight ? (
                         <span className="live-dot h-2 w-2 rounded-full bg-signal" />

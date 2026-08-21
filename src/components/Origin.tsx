@@ -23,10 +23,10 @@ export function Origin() {
     },
     {
       year: "2026",
-      tag: "DUAL-SHELL PARITY",
-      title: "Packaged into a single zero-dependency file",
-      desc: "Ported every single function to Windows PowerShell with 1:1 behavioral parity. Sandboxed tests were added to mock Docker, Kubernetes, and network calls so nothing on the host is touched.",
-      commands: ["sharmory.zsh", "sharmory.ps1", "100% tests"],
+      tag: "TRIPLE-SHELL PARITY",
+      title: "142 functions across Zsh, Bash, and PowerShell",
+      desc: "Ported every single function to Bash and Windows PowerShell with 1:1 behavioral parity. Added new tools: ipinfo, portscan, tlscheck, gpr, hist, mktemplate, envswitch, and more. Sandboxed tests mock all three shells plus Docker, K8s, and network calls.",
+      commands: ["functions.zsh", "functions.bash", "functions.ps1", "142 tools"],
       badge: `${version} / MIT OPEN SOURCE`,
     },
   ];
