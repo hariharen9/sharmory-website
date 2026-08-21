@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { Reveal, SectionHead, MaskLine } from "./primitives";
+import { SHIPPED } from "@/lib/armoury";
 import { SiApple, SiLinux, SiGnubash } from "react-icons/si";
 import { FaWindows } from "react-icons/fa6";
 import { VscTerminalPowershell } from "react-icons/vsc";
@@ -479,7 +480,7 @@ export function Parity() {
             <div className="border border-hairline bg-card/30 p-5 h-full flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between">
-                  <div className="display text-3xl sm:text-4xl text-signal">142/142</div>
+                  <div className="display text-3xl sm:text-4xl text-signal">{SHIPPED}/{SHIPPED}</div>
                   <FiCheckCircle className="text-lg text-signal/70" />
                 </div>
                 <div className="font-mono text-xs font-bold uppercase mt-2 text-foreground">

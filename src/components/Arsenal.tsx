@@ -6,9 +6,11 @@ import {
   SiGit,
   SiDocker,
   SiKubernetes,
+  SiVite,
   SiGo,
   SiNodedotjs,
   SiPython,
+  SiRuby,
   SiJenkins,
 } from "react-icons/si";
 import {
@@ -19,6 +21,9 @@ import {
   FiZap,
   FiTerminal,
   FiSearch,
+  FiDatabase,
+  FiKey,
+  FiCode,
 } from "react-icons/fi";
 
 const CATEGORY_ICONS: Record<string, React.ReactNode> = {
@@ -26,12 +31,16 @@ const CATEGORY_ICONS: Record<string, React.ReactNode> = {
   git: <SiGit />,
   docker: <SiDocker />,
   k8s: <SiKubernetes />,
+  vite: <SiVite />,
   go: <SiGo />,
   node: <SiNodedotjs />,
   python: <SiPython />,
+  languages: <FiCode />,
+  databases: <FiDatabase />,
   net: <FiGlobe />,
   security: <FiShield />,
   system: <FiActivity />,
+  env: <FiKey />,
   prod: <FiZap />,
   jenkins: <SiJenkins />,
   meta: <FiTerminal />,

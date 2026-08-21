@@ -1,5 +1,6 @@
 import { Reveal, SectionHead, MaskLine } from "./primitives";
 import { useSharmoryVersion } from "@/lib/useVersion";
+import { SHIPPED } from "@/lib/armoury";
 
 export function Origin() {
   const { version } = useSharmoryVersion();
@@ -24,9 +25,9 @@ export function Origin() {
     {
       year: "2026",
       tag: "TRIPLE-SHELL PARITY",
-      title: "142 functions across Zsh, Bash, and PowerShell",
-      desc: "Ported every single function to Bash and Windows PowerShell with 1:1 behavioral parity. Added new tools: ipinfo, portscan, tlscheck, gpr, hist, mktemplate, envswitch, and more. Sandboxed tests mock all three shells plus Docker, K8s, and network calls.",
-      commands: ["functions.zsh", "functions.bash", "functions.ps1", "142 tools"],
+      title: `${SHIPPED} functions across Zsh, Bash, and PowerShell`,
+      desc: "Ported every single function to Bash and Windows PowerShell with 1:1 behavioral parity. Added Vite+React tools, crons, DB clients, API mocks, Java/Ruby helpers, and env security. Sandboxed tests mock all three shells plus Docker, K8s, and network calls.",
+      commands: ["functions.zsh", "functions.bash", "functions.ps1", `${SHIPPED} tools`],
       badge: `${version} / MIT OPEN SOURCE`,
     },
   ];

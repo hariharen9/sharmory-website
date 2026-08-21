@@ -31,19 +31,19 @@ const DETECTION_STEPS = [
 
 const UNIX_TERMINAL_LINES = [
   { kind: "cmd", text: UNIX_CMD },
-  { kind: "out", text: "  → Downloading sharmory v2.1.0..." },
+  { kind: "out", text: "  → Downloading sharmory v1.0.0..." },
   { kind: "out", text: "  → Detected shell: zsh (5.9)" },
   { kind: "ok",  text: "  ✓ Wrote ~/.sharmory/functions.zsh" },
   { kind: "ok",  text: "  ✓ Sourced in ~/.zshrc" },
-  { kind: "ok",  text: "  ✓ 142 functions armed. Restart or: source ~/.zshrc" },
+  { kind: "ok",  text: `  ✓ ${SHIPPED} functions armed. Restart or: source ~/.zshrc` },
 ];
 
 const WIN_TERMINAL_LINES = [
   { kind: "cmd", text: WIN_CMD },
-  { kind: "out", text: "  → Downloading sharmory v2.1.0..." },
+  { kind: "out", text: "  → Downloading sharmory v1.0.0..." },
   { kind: "ok",  text: "  ✓ Wrote C:\\Users\\You\\.sharmory\\functions.ps1" },
   { kind: "ok",  text: "  ✓ Sourced in $PROFILE" },
-  { kind: "ok",  text: "  ✓ 142 functions armed. Restart or: . $PROFILE" },
+  { kind: "ok",  text: `  ✓ ${SHIPPED} functions armed. Restart or: . $PROFILE` },
 ];
 
 const LIFECYCLE = [
